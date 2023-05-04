@@ -1,15 +1,16 @@
 import React from "react";
 import { Form, Input, Button } from 'antd';
-
+import { Buffer } from 'buffer';
 import axios from "axios";
 import { api } from './common/http-common';
-import UserConfig from "./common/user-config";
 import authHeader from "../services/authHeader";
+import UserConfig from "./common/user-config";
 
 const { TextArea } = Input
 
-const NewArticles = () => {
-  UserConfig();
+const NewCat = () => {
+    
+    UserConfig();
 
   const handleFormSubmit = (values: any) => {
     const t = values.title;
@@ -21,15 +22,14 @@ const NewArticles = () => {
       authorID: 1
     }
 
-  // Post request
-  axios.post(`${api.uri}/articles`, postArticle, {
-    headers: 
-      authHeader()
+    // Post request
+    axios.post(`${api.uri}/articles`, postArticle, {
+      headers: 
+        authHeader()
 
-  }).then((res) => {
-    console.log(res.data);
-  });
-
+    }).then((res) => {
+      console.log(res.data);
+    });
 
   }
 
@@ -53,4 +53,4 @@ const NewArticles = () => {
   )
 }
 
-export default NewArticles;
+export default NewCat;

@@ -3,12 +3,22 @@ import { Layout, Space} from 'antd';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 //import Landing from "./components/Landing"
 import Home from './components/Home';
-import Dashboard from './components/Dashboard';
+import Favourites from './components/Favourites';
 import About from './components/About';
 import DetailArticle from './components/DetailArticle';
 import NewArticles from './components/NewArticles';
+import LoginPage from './components/LoginPage';
+import UserInfterface from './types/user.type';
 
 const { Header, Content, Footer } = Layout;
+
+type Props = {};
+
+type State = {
+  showModeratorBoard: boolean,
+  showAdminBoard: boolean,
+  currentUser: UserInfterface | undefined
+}
 
 export default function App() {
   return (
@@ -17,7 +27,7 @@ export default function App() {
         <nav>
           <Space>
             <Link to="/">Home</Link>
-            <Link to="/dashboard">Dashboard</Link>
+            <Link to="/favourites">Favourites</Link>
             <Link to="/about">About</Link>
             <Link to="/newarticle">New</Link>
           </Space>
@@ -26,14 +36,14 @@ export default function App() {
       <Content>
         <Routes>
           <Route index element={ <Home /> } />
-          <Route path="/dashboard" element={<Dashboard />}  />  
+          <Route path="/login" element={<LoginPage />}  /> 
+          <Route path="/favourites" element={<Favourites />}  />  
           <Route path="/about" element={<About />}  />
           <Route path="/a/:aid" element = {<DetailArticle /> } />
           <Route path="/newarticle" element= {<NewArticles />} />
         </Routes>
       </Content>
       <Footer>
-        <p>VT6003CEM Demo</p>
       </Footer>
     </Router>
   )

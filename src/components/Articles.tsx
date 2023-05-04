@@ -28,6 +28,7 @@ const Article = () => {
       return (<div>There is no article available now.</div>)
     } else {
       return (
+        
         <Row>
           {
             articles && articles.map(({ id, title, alltext }) => (

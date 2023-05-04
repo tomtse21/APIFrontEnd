@@ -1,8 +1,8 @@
 import React from 'react';
 import Article from './Articles'
 
-const Home = () => {
+const Registrationpage = () => {
   return <Article/>;
 }
 
-export default Home;
+export default Registrationpage;
