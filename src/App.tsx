@@ -9,6 +9,7 @@ import DetailArticle from './components/DetailArticle';
 import NewArticles from './components/NewArticles';
 import LoginPage from './components/LoginPage';
 import UserInfterface from './types/user.type';
+import NewCat from './components/NewCat';
 
 const { Header, Content, Footer } = Layout;
 
@@ -30,6 +31,7 @@ export default function App() {
             <Link to="/favourites">Favourites</Link>
             <Link to="/about">About</Link>
             <Link to="/newarticle">New</Link>
+            <Link to="/newcat">New Cat</Link>
           </Space>
         </nav>
       </Header>
@@ -40,7 +42,7 @@ export default function App() {
           <Route path="/favourites" element={<Favourites />}  />  
           <Route path="/about" element={<About />}  />
           <Route path="/a/:aid" element = {<DetailArticle /> } />
-          <Route path="/newarticle" element= {<NewArticles />} />
+          <Route path="/newcat" element= {<NewCat />} />
         </Routes>
       </Content>
       <Footer>

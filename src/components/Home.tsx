@@ -1,8 +1,8 @@
 import React from 'react';
-import Article from './Articles'
+import ShowCats from './ShowCats';
 
 const Home = () => {
-  return <Article/>;
+  return <ShowCats/>;
 }
 
 export default Home;
