@@ -21,7 +21,17 @@ const RegAcc = () => {
             email: _email
         }
 
-       console.log(await userService.regAcc(postUser)); // TODO
+        axios.post(`${api.uri}/users`, postUser, {
+          // headers:  
+          //     authHeader() // for auth 
+          }).then((res) => {
+            alert(res.data)
+            if(res.status == 201){
+              alert("Create successfully!")
+            }else {
+              alert("Create failed, please insert corrent user information!")
+            }
+          });
         
     }
 
