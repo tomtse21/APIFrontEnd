@@ -1,6 +1,6 @@
 import React from 'react';
 import Article from './Articles'
-import { Button, Checkbox, Form, Input } from 'antd';
+import { Alert, Button, Checkbox, Form, Input } from 'antd';
 import {Link} from "react-router-dom";
 import axios from 'axios';
 import { api } from './common/http-common';
@@ -10,8 +10,12 @@ import * as userService  from '../services/userService';
 
 
 const RegAcc = () => {
+
+  const [showMessage, setShowMessage] = React.useState(false);
+  const [successStr, setSuccessStr] = React.useState("");
+
     UserConfig();
-    const handleFormSubmit = async (values: any) => {
+    const handleFormSubmit = (values: any) => {
         const _username = values.username;
         const _password = values.password;
         const _email = values.email;
@@ -21,21 +25,25 @@ const RegAcc = () => {
             email: _email
         }
 
-        axios.post(`${api.uri}/users`, postUser, {
+       return axios.post(`${api.uri}/users`, postUser, {
           // headers:  
           //     authHeader() // for auth 
           }).then((res) => {
-            alert(res.data)
+            setShowMessage(true);
             if(res.status == 201){
-              alert("Create successfully!")
+              setSuccessStr("Create successfully!")
             }else {
-              alert("Create failed, please insert corrent user information!")
+              setSuccessStr("Create failed, please insert corrent user information!")
             }
           });
         
     }
 
   return (<div>
+    {showMessage && (
+        <Alert message={successStr} type="success" closable  />
+    )}
+    
     <Form
     name="basic"
     labelCol={{ span: 8 }}
@@ -45,6 +53,8 @@ style={{ maxWidth: 600,marginTop:50 }}
     onFinish={(values) => handleFormSubmit(values)}
     autoComplete="off"
   >
+     
+
     <Form.Item
       label="Username"
       name="username"
