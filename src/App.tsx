@@ -4,12 +4,14 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 //import Landing from "./components/Landing"
 import Home from './components/Home';
 import Favourites from './components/Favourites';
-import About from './components/About';
+import MemberInformation from './components/MemberInformation';
 import DetailArticle from './components/DetailArticle';
 import NewArticles from './components/NewArticles';
 import LoginPage from './components/LoginPage';
 import UserInfterface from './types/user.type';
 import NewCat from './components/NewCat';
+import RegAcc from './components/RegAccount';
+import Articles from './components/Articles';
 
 const { Header, Content, Footer } = Layout;
 
@@ -28,21 +30,26 @@ export default function App() {
         <nav>
           <Space>
             <Link to="/">Home</Link>
+            <Link to="/memberInfo">Member Information</Link>™
             <Link to="/favourites">Favourites</Link>
-            <Link to="/about">About</Link>
             <Link to="/newarticle">New</Link>
             <Link to="/newcat">New Cat</Link>
+            <Link to="/articles">Articles</Link>
+            <Link to="/newArticles">New Articles</Link>
           </Space>
         </nav>
       </Header>
       <Content>
         <Routes>
-          <Route index element={ <Home /> } />
-          <Route path="/login" element={<LoginPage />}  /> 
+          {/* <Route index element={ <Home /> } /> */}
+          <Route index element={<LoginPage />}  /> 
           <Route path="/favourites" element={<Favourites />}  />  
-          <Route path="/about" element={<About />}  />
-          <Route path="/a/:aid" element = {<DetailArticle /> } />
+          <Route path="/memberInfo" element={<MemberInformation />}  />
+          {/* <Route path="/a/:aid" element = {<DetailArticle /> } /> */}
           <Route path="/newcat" element= {<NewCat />} />
+          <Route path="/regAcc" element= {<RegAcc />} />
+          <Route path="/articles" element= {<Articles />} />
+          <Route path="/newArticles" element= {<NewArticles />} />
         </Routes>
       </Content>
       <Footer>

@@ -4,11 +4,15 @@ import { Card, Col, Row, Spin } from 'antd';
 //import articles from './articles.json';
 import { api } from './common/http-common';
 import axios from 'axios';
-import Icon, { DeleteOutlined, LoadingOutlined } from '@ant-design/icons';
+import Icon, { DeleteOutlined, HeartFilled, HeartOutlined, LoadingOutlined } from '@ant-design/icons';
+
+import styles from './ShowCats.css';
 
 const Article = () => {
   const [articles, setArticles] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
+  const [isliked, setIsLiked] = React.useState(false);
+
 
   React.useEffect(() => {
     axios.get(`${api.uri}/articles`)
@@ -20,8 +24,16 @@ const Article = () => {
       })
   }, []);
 
-  function onClick(id: any) {
-    alert(`hello, ${id}`);
+  function onClick(id: any, isliked: boolean) {
+    alert(isliked)
+   React.useEffect(()=>{
+    setIsLiked(!isliked);
+    
+   });
+  }
+
+  function onClickDelete(id: any) {
+      alert(id);
   }
 
   if (loading) {
@@ -37,12 +49,16 @@ const Article = () => {
           {
             articles && articles.map(({ id, title, alltext }) => (
               <Col span={12} key={id}>
-                <Card  title={title} cover={<img alt="example" style={{width:400, height:500}} src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />}>
-                  <p>{alltext}</p>
+                <Card className="cardLayout" title={`Name :`+title} cover={<img alt="example" style={{width:400, height:500}} src="https://cdn2.thecatapi.com/images/8ru.jpg" />}>
+                  <p>Description: {alltext}</p>
                   <p></p>
-                  <Link to={`/a/${id}`}>Details</Link>
+                  {/* <Link to={`/a/${id}`}>Details</Link> */}
                   <p></p>
-                    <DeleteOutlined onClick={()=> onClick(id)}/>
+                  {
+                          isliked? <HeartFilled onClick={()=> onClick(id,false)} /> 
+                          :<HeartOutlined onClick={()=> onClick(id, true)}/>
+                  }
+                   <DeleteOutlined onClick={()=> onClickDelete(id)}/>
                 </Card>
               </Col>
             ))
@@ -50,6 +66,10 @@ const Article = () => {
         </Row>
       )
     }
+  }
+
+  const cardLayout={
+    backgroudColor: '#FFF'
   }
 }
 

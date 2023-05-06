@@ -1,0 +1,6 @@
+:local(.black-btn) {
+   background-color: black;
+  }
+:local(.red-btn) {
+   background-color: red;
+}
