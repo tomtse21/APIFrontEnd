@@ -14,7 +14,6 @@ const RegAcc = () => {
   const [showMessage, setShowMessage] = React.useState(false);
   const [successStr, setSuccessStr] = React.useState("");
 
-    UserConfig();
     const handleFormSubmit = (values: any) => {
         const _username = values.username;
         const _password = values.password;

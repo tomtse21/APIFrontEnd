@@ -9,8 +9,7 @@ import UserConfig from "./common/user-config";
 const { TextArea } = Input
 
 const NewCat = () => {
-    
-    UserConfig();
+
 
   const handleFormSubmit = (values: any) => {
     const t = values.title;

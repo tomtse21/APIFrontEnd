@@ -28,7 +28,6 @@ const Article = () => {
     alert(isliked)
    React.useEffect(()=>{
     setIsLiked(!isliked);
-    
    });
   }
 

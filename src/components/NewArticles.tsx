@@ -9,9 +9,10 @@ import authHeader from "../services/authHeader";
 const { TextArea } = Input
 
 const NewArticles = () => {
-  UserConfig();
 
   const handleFormSubmit = (values: any) => {
+    // UserConfig();
+
     const t = values.title;
     const c = values.context;
     console.log(values, t, c);

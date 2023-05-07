@@ -2,13 +2,14 @@ import axios from "axios";
 import { api } from "../components/common/http-common";
 import authHeader from "../services/authHeader";
 
-class AuthService {
+export default class AuthService {
 
-    getCurrentUser = ()=>{
-
+    static getCurrentUser = ()=>{
+        return  localStorage.getItem('atoken');
     }
 
-    LogoutOutlined = () =>{
-
+   static LogoutOut = () =>{
+    localStorage.removeItem("atoken");
     }
 }
+
