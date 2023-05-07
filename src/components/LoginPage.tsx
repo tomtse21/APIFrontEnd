@@ -6,13 +6,12 @@ import UserConfig from './common/user-config';
 import axios from 'axios';
 import { api } from './common/http-common';
 import authHeader from "../services/authHeader";
+import { useSignIn } from 'react-auth-kit';
 
 const LoginPage = () => {
   const [showMessage, setShowMessage] = React.useState(false);
   const [successStr, setSuccessStr] = React.useState("");
-  
-  const navigate = useNavigate();
-
+  const signIn = useSignIn();
 
   const onFinish = (values: any) => {
     console.log('Success:', values);
@@ -35,12 +34,17 @@ const LoginPage = () => {
         }).then((res) => {
           setShowMessage(true);
           console.log(res.data);
+          
           if(res.status == 201){
             setSuccessStr("login successfully!")
-              
             UserConfig(_username, _password);
-            console.log(localStorage.getItem('atoken'))
-            navigate('/memberInfo');
+            console.log(112312)
+            signIn({
+              token: localStorage.getItem('atoken') as string,
+              expiresIn: 3600,
+              tokenType: "Bearer",
+              authState: {email: _username}
+            });
           }else {
             setSuccessStr("login failed, please insert corrent user information!")
           }
@@ -100,3 +104,4 @@ const LoginPage = () => {
 }
 
 export default LoginPage;
+

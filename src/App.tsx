@@ -14,6 +14,7 @@ import RegAcc from './components/RegAccount';
 import Articles from './components/Articles';
 import React from 'react';
 import AuthService from './services/authService';
+import { RequireAuth } from 'react-auth-kit';
 
 const { Header, Content, Footer } = Layout;
 
@@ -42,16 +43,7 @@ export default function App() {
     <Router>
       <Header>
         <nav>
-          {
-            !islogin && (
-              <Space>
-                <Link to="/">Home</Link>
-            </Space>
-            )
-          }
-          
-          {
-            islogin && (
+           
             <Space>
                 <Link to="/">Home</Link>
                 <Link to="/memberInfo">Member Information</Link>™
@@ -62,8 +54,7 @@ export default function App() {
                 <Link to="/newArticles">New Articles</Link>
                 
             </Space>
-            )
-          }
+           
           <Button type="primary" onClick={logout}>Button</Button>
         </nav>
       </Header>
@@ -71,13 +62,14 @@ export default function App() {
         <Routes>
           {/* <Route index element={ <Home /> } /> */}
           <Route index element={<LoginPage />}  /> 
-          <Route path="/favourites" element={<Favourites />}  />  
-          <Route path="/memberInfo" element={<MemberInformation />}  />
+          <Route path="/login" element={<LoginPage />}  /> 
+          <Route path="/favourites" element={<RequireAuth loginPath="/login"> <Favourites /></RequireAuth>} ></Route>
+          <Route path="/memberInfo" element={<MemberInformation />} > </Route>
           {/* <Route path="/a/:aid" element = {<DetailArticle /> } /> */}
-          <Route path="/newcat" element= {<NewCat />} />
-          <Route path="/regAcc" element= {<RegAcc />} />
-          <Route path="/articles" element= {<Articles />} />
-          <Route path="/newArticles" element= {<NewArticles />} />
+          <Route path="/newcat" element= {<NewCat />} > </Route>
+          <Route path="/regAcc" element= {<RegAcc />} > </Route>
+          <Route path="/articles" element= {<Articles />} > </Route>
+          <Route path="/newArticles" element= {<NewArticles />} > </Route>
         </Routes>
       </Content>
       <Footer>
