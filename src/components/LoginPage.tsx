@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import Article from './Articles'
-import { Button, Checkbox, Form, Input } from 'antd';
+import { Button, Checkbox, Col, Form, Input, Row } from 'antd';
 import {Link, useNavigate} from "react-router-dom";
 import UserConfig from './common/user-config';
 import axios from 'axios';
@@ -59,7 +59,7 @@ const LoginPage = () => {
   return (<div>
     <Form
     name="basic"
-    labelCol={{ span: 8 }}
+    labelCol={{ span: 8}}
     wrapperCol={{ span: 16 }}
     style={{ maxWidth: 600,marginTop:50 }}
     initialValues={{ remember: true }}
@@ -67,6 +67,7 @@ const LoginPage = () => {
     onFinishFailed={onFinishFailed}
     autoComplete="off"
   >
+   
     <Form.Item
       label="Username"
       name="username"
@@ -82,24 +83,28 @@ const LoginPage = () => {
     >
       <Input.Password />
     </Form.Item>
+    
+    <Row>
+      <Col>
+        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
+        </Form.Item>
+      </Col>
+      <Col>
+        <Form.Item wrapperCol={{ offset: 8}}>
+          <Link to="/regAcc"> 
+            <Button type="dashed" htmlType="button" >
+              Create Account
+            </Button>
+          </Link>
+        </Form.Item>
+      </Col>
+    </Row>
+ 
 
-    <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
-      <Checkbox>Remember me</Checkbox>
-    </Form.Item>
-
-    <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-      <Button type="primary" htmlType="submit">
-        Submit
-      </Button>
-    </Form.Item>
-
-    <Form.Item wrapperCol={{ offset: 8}}>
-    <Link to="/regAcc"> 
-      <Button type="dashed" htmlType="button" >
-        Create Account
-      </Button>
-      </Link>
-    </Form.Item>
+    
   </Form>
   </div>);
 

@@ -66,8 +66,8 @@ export default function App() {
   const items = [
     {label: 'Home', key:'/', icon:<HomeOutlined/>},
     {label: 'favourites', key:'favourites', icon:<HeartOutlined/>},
-    {label: 'newcat', key:'newcat', icon:<PlusOutlined/>},
-    {label: 'memberInfo', key:'memberInfo', icon:<InfoOutlined/>},
+    isAuthenticated()?{label: 'newcat', key:'newcat', icon:<PlusOutlined/>}:null,
+    isAuthenticated()?{label: 'memberInfo', key:'memberInfo', icon:<InfoOutlined/>}:null,
     !isAuthenticated()?{label: 'login', key:'login', icon:<LoginOutlined />}:null,
     isAuthenticated()?{label: 'logout', key:'logout', icon:<LogoutOutlined />}:null
   ]
@@ -79,7 +79,7 @@ export default function App() {
           console.log("logout");
           singOut();
           navigate("/")
-        }else if(key === "memberInfo"){
+        }else if(key === "memberInfo" || key === "favourites"){
           navigate('/login');
         }else {
           navigate(key);
@@ -100,12 +100,17 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/login" element={<LoginPage />}></Route>
-          <Route path="/newcat" element= {<NewCat />} > </Route>
           <Route path="/regAcc" element= {<RegAcc />} > </Route>
 
           <Route path={'/memberInfo'} element={
             <RequireAuth loginPath={'/login'}>
               <MemberInformation />
+            </RequireAuth>
+          }/>
+
+          <Route path={'/newcat'} element={
+            <RequireAuth loginPath={'/login'}>
+              <NewCat />
             </RequireAuth>
           }/>
 

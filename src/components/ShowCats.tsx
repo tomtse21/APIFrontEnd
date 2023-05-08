@@ -47,8 +47,8 @@ const Article = () => {
         <Row gutter={[8, 8]}>
           {
             articles && articles.map(({ id, title, alltext }) => (
-              <Col span={12} key={id}>
-                <Card className="cardLayout" title={`Name :`+title} cover={<img alt="example" style={{width:400, height:500}} src="https://cdn2.thecatapi.com/images/8ru.jpg" />}>
+              <Col xs={12} md={8} key={id}>
+                <Card className="cardLayout" title={`Name :`+title} cover={<img alt="example" src="https://cdn2.thecatapi.com/images/8ru.jpg" />}>
                   <p>Description: {alltext}</p>
                   <p></p>
                   {/* <Link to={`/a/${id}`}>Details</Link> */}

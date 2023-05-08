@@ -14,35 +14,52 @@ const MemberInformation = () => {
   const [showMessage, setShowMessage] = React.useState(false);
   const [successStr, setSuccessStr] = React.useState("");
 
-    const handleFormSubmit = (values: any) => {
-        const _username = values.username;
-        const _password = values.password;
-        const _email = values.email;
-        const postUser = {
-            username: _username,
-            password: _password,
-            email: _email
-        }
+  const [members, setMemberInfo] = React.useState({});
+  const [loading, setLoading] = React.useState(true);
 
-       return axios.post(`${api.uri}/users`, postUser, {
-          // headers:  
-          //     authHeader() // for auth 
-          }).then((res) => {
-            setShowMessage(true);
-            if(res.status == 201){
-              setSuccessStr("Create successfully!")
-            }else {
-              setSuccessStr("Create failed, please insert corrent user information!")
-            }
-          });
-        
-    }
+
+  const handleFormSubmit = (values: any) => {
+      const _username = values.username;
+      const _password = values.password;
+      const _email = values.email;
+      const postUser = {
+          username: _username,
+          password: _password,
+          email: _email
+      }
+
+      return axios.post(`${api.uri}/users/getUserInfo`, postUser, {
+         headers:  
+             authHeader() // for auth 
+        }).then((res) => {
+          setShowMessage(true);
+          if(res.status == 201){
+            setSuccessStr("Create successfully!")
+          }else {
+            setSuccessStr("Create failed, please insert corrent user information!")
+          }
+        });
+      
+  }
+
+  // React.useEffect(() => {
+  //   axios.get(`${api.uri}/users/getUserInfo`, {
+  //     headers:  
+  //         authHeader() // for auth 
+  //     })
+  //     .then((res) => {
+  //       setMemberInfo(res.data);
+  //     })
+  //     .then(() => {
+  //       setLoading(false);
+  //     })
+  // }, []);
 
   return (<div>
     {showMessage && (
         <Alert message={successStr} type="success" closable  />
     )}
-    sadfadf
+
     <Form
     name="basic"
     labelCol={{ span: 8 }}
@@ -58,7 +75,7 @@ const MemberInformation = () => {
       name="username"
       rules={[{ required: true, message: 'Please input your username!' }]}
     >
-      <Input />
+      <Input value={members['']}/>
     </Form.Item>
 
     <Form.Item
@@ -66,7 +83,7 @@ const MemberInformation = () => {
       name="password"
       rules={[{ required: true, message: 'Please input your password!' }]}
     >
-      <Input />
+      <Input value={members['']}/>
     </Form.Item>
 
     <Form.Item
@@ -74,7 +91,7 @@ const MemberInformation = () => {
       name="email"
       rules={[{ required: true, message: 'Please input your email!' }]}
     >
-      <Input />
+      <Input value={members['']} />
     </Form.Item>
     
 
