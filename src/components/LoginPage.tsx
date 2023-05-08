@@ -13,6 +13,7 @@ const LoginPage = () => {
   const [successStr, setSuccessStr] = React.useState("");
   const signIn = useSignIn();
 
+  const navigate = useNavigate();
   const onFinish = (values: any) => {
     console.log('Success:', values);
   };
@@ -38,13 +39,15 @@ const LoginPage = () => {
           if(res.status == 201){
             setSuccessStr("login successfully!")
             UserConfig(_username, _password);
-            console.log(112312)
+
             signIn({
               token: localStorage.getItem('atoken') as string,
               expiresIn: 3600,
               tokenType: "Bearer",
               authState: {email: _username}
             });
+
+            navigate("/memberInfo");
           }else {
             setSuccessStr("login failed, please insert corrent user information!")
           }

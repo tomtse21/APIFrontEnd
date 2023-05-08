@@ -47,7 +47,6 @@ const RegAcc = () => {
     name="basic"
     labelCol={{ span: 8 }}
     wrapperCol={{ span: 16 }}
-style={{ maxWidth: 600,marginTop:50 }}
     initialValues={{ remember: true }}
     onFinish={(values) => handleFormSubmit(values)}
     autoComplete="off"
