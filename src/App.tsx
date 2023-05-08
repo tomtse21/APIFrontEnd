@@ -12,9 +12,9 @@ import UserInfterface from './types/user.type';
 import NewCat from './components/NewCat';
 import RegAcc from './components/RegAccount';
 import Articles from './components/Articles';
-import React from 'react';
+import React, { useEffect } from 'react';
 import AuthService from './services/authService';
-import { RequireAuth, useSignOut } from 'react-auth-kit';
+import { RequireAuth, useIsAuthenticated, useSignOut } from 'react-auth-kit';
 import Icon, { HeartOutlined, HomeOutlined, InfoOutlined, LoginOutlined, LogoutOutlined, PlusOutlined } from '@ant-design/icons';
 
 const { Header, Content, Footer } = Layout;
@@ -26,6 +26,8 @@ export default function App() {
   const [islogin, setIslogin] = React.useState(false);
   const navigate = useNavigate();
   const singOut = useSignOut();
+  const isAuthenticated = useIsAuthenticated()
+
   // const getUserConfig = () => {
   //   React.useEffect(() => {
   //     if( AuthService.getCurrentUser() && AuthService.getCurrentUser()?.length !==0 ){
@@ -38,9 +40,7 @@ export default function App() {
 
   const logout = (event: any) => {
     // AuthService.LogoutOut();
-    console.log("logout");
-    singOut();
-    navigate("/")
+ 
     // setIslogin(false);
   }
 
@@ -68,16 +68,20 @@ export default function App() {
     {label: 'favourites', key:'favourites', icon:<HeartOutlined/>},
     {label: 'newcat', key:'newcat', icon:<PlusOutlined/>},
     {label: 'memberInfo', key:'memberInfo', icon:<InfoOutlined/>},
-    {label: 'login', key:'login', icon:<LoginOutlined />},
-    {label: 'logout', key:'logout', onClick:logout,icon:<LogoutOutlined />}
+    !isAuthenticated()?{label: 'login', key:'login', icon:<LoginOutlined />}:null,
+    isAuthenticated()?{label: 'logout', key:'logout', icon:<LogoutOutlined />}:null
   ]
   function SideMenu(){
     return (
       <div>
       <Menu onClick={({key})=>{
         if( key === "logout"){
-          
-        }else{
+          console.log("logout");
+          singOut();
+          navigate("/")
+        }else if(key === "memberInfo"){
+          navigate('/login');
+        }else {
           navigate(key);
         }
       }} defaultSelectedKeys={(window.location.pathname)}
@@ -96,10 +100,16 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/login" element={<LoginPage />}></Route>
-          <Route path="/memberInfo" element={<RequireAuth loginPath="/login"> <MemberInformation /></RequireAuth>}  /> 
-          
           <Route path="/newcat" element= {<NewCat />} > </Route>
           <Route path="/regAcc" element= {<RegAcc />} > </Route>
+
+          <Route path={'/memberInfo'} element={
+            <RequireAuth loginPath={'/login'}>
+              <MemberInformation />
+            </RequireAuth>
+          }/>
+
+          
           {/* <Route index element={ <Home /> } /> */}
           {/* <Route index element={<LoginPage />}  /> 
           <Route path="/" element={<RequireAuth loginPath="/memberInfo"> <LoginPage /></RequireAuth>}  />
