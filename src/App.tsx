@@ -16,6 +16,7 @@ import React, { useEffect } from 'react';
 import AuthService from './services/authService';
 import { RequireAuth, useIsAuthenticated, useSignOut } from 'react-auth-kit';
 import Icon, { HeartOutlined, HomeOutlined, InfoOutlined, LoginOutlined, LogoutOutlined, PlusOutlined } from '@ant-design/icons';
+import ShowCats from './components/ShowCats';
 
 const { Header, Content, Footer } = Layout;
 
@@ -65,7 +66,7 @@ export default function App() {
   }
   const items = [
     {label: 'Home', key:'/', icon:<HomeOutlined/>},
-    {label: 'favourites', key:'favourites', icon:<HeartOutlined/>},
+    isAuthenticated()?{label: 'favourites', key:'favourites', icon:<HeartOutlined/>}:null,
     isAuthenticated()?{label: 'newcat', key:'newcat', icon:<PlusOutlined/>}:null,
     isAuthenticated()?{label: 'memberInfo', key:'memberInfo', icon:<InfoOutlined/>}:null,
     !isAuthenticated()?{label: 'login', key:'login', icon:<LoginOutlined />}:null,
@@ -79,8 +80,6 @@ export default function App() {
           console.log("logout");
           singOut();
           navigate("/")
-        }else if(key === "memberInfo" || key === "favourites"){
-          navigate('/login');
         }else {
           navigate(key);
         }
@@ -98,7 +97,7 @@ export default function App() {
     return (
       <div style={{padding: 15, justifyContent:'center'}}>
         <Routes>
-          <Route path="/" element={<Home />}></Route>
+          <Route path="/" element={<ShowCats />}></Route>
           <Route path="/login" element={<LoginPage />}></Route>
           <Route path="/regAcc" element= {<RegAcc />} > </Route>
 
@@ -114,16 +113,12 @@ export default function App() {
             </RequireAuth>
           }/>
 
-          
-          {/* <Route index element={ <Home /> } /> */}
-          {/* <Route index element={<LoginPage />}  /> 
-          <Route path="/" element={<RequireAuth loginPath="/memberInfo"> <LoginPage /></RequireAuth>}  />
-          <Route path="/login" element={<RequireAuth loginPath="/login"> <LoginPage /></RequireAuth>}  /> 
-          <Route path="/favourites" element={<RequireAuth loginPath="/login"> <Favourites /></RequireAuth>} ></Route>
-          
-          
-          <Route path="/articles" element= {<Articles />} > </Route>
-          <Route path="/newArticles" element= {<NewArticles />} > </Route> */}
+          <Route path={'/favourites'} element={
+            <RequireAuth loginPath={'/login'}>
+              <Favourites />
+            </RequireAuth>
+          }/>
+
         </Routes>
       </div>
     )
@@ -132,6 +127,7 @@ export default function App() {
   return (
     <div  style={{display: "flex" , flexDirection:"column", flex:1,height:'100vh'}}>
       <Header/>
+      {isAuthenticated()?"isAuth":"not Auth"}
       <div  style={{display: "inline-flex" , flexFlow: 'row',width: '100%',flexDirection:"row", flex:2}}>
         <SideMenu />
         <Content />
