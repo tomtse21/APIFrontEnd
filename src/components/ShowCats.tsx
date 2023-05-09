@@ -18,7 +18,7 @@ const Cat = () => {
   React.useEffect(() => {
     axios.get(`${api.uri}/cats`)
       .then((res) => {
-        console.log(res.data.length>=1)
+
         if(res.data.length>=1){
           setCats(res.data);
         }
@@ -62,10 +62,10 @@ const Cat = () => {
             <Row gutter={[8, 8]}>
           
           {
-            cats && cats!.map(({ id, name, desc }) => (
+            cats && cats!.map(({ id, name, description }) => (
               <Col xs={24} sm={18} md={12} xl={6} key={id}>
                 <Card style={{paddingLeft: 15, paddingRight: 15}} title={`Name :`+name} cover={<img alt="example" src="https://cdn2.thecatapi.com/images/8ru.jpg" />}>
-                  <p>Description: {desc}</p>
+                  <p>Description: {description}</p>
                   <p></p>
                   {/* <Link to={`/a/${id}`}>Details</Link> */}
                   <p></p>

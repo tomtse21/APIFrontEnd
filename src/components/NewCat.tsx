@@ -13,10 +13,10 @@ const NewCat = () => {
 
   const handleFormSubmit = (values: any) => {
     const _name = values.name;
-    const _desc = values.desc;
+    const _description = values.description;
     const postCat = {
       name: _name,
-      desc: _desc
+      description: _description
     }
 
     // Post request
