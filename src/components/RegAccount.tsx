@@ -1,6 +1,6 @@
 import React from 'react';
 import Article from './Articles'
-import { Alert, Button, Col, Form, Input, Row } from 'antd';
+import { Alert, Button, Checkbox, Col, Divider, Form, Input, Row } from 'antd';
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { api } from './common/http-common';
@@ -15,6 +15,7 @@ const RegAcc = () => {
   const [successStr, setSuccessStr] = React.useState("");
   const [loginSuccess, setLoginSuccess] = React.useState(false);
   const navigate = useNavigate();
+  const [componentDisabled, setComponentDisabled] = React.useState<boolean>(false);
 
   const handleFormSubmit = (values: any) => {
     const _username = values.username;
@@ -25,6 +26,7 @@ const RegAcc = () => {
       password: _password,
       email: _email
     }
+    
 
     return axios.post(`${api.uri}/users`, postUser, {
       // headers:  
@@ -83,7 +85,22 @@ const RegAcc = () => {
         <Input />
       </Form.Item>
 
-
+      <Divider />
+      
+      <Checkbox
+        checked={componentDisabled}
+        onChange={(e) => setComponentDisabled(e.target.checked)}
+      >
+      <div style={{ fontSize: 12 }}>* For Staff Only</div>
+      </Checkbox>
+      
+      <Form.Item
+        label="Staff Code"
+        name="staffCode"
+        rules={[{ required: false, message: '' }]}
+      >
+        <Input disabled={!componentDisabled}/>
+      </Form.Item>
 
       <Row>
         <Col>
@@ -95,9 +112,9 @@ const RegAcc = () => {
         </Col>
         <Col>
           <Form.Item wrapperCol={{ offset: 8 }}>
-            <Link to="/regAcc">
-              <Button type="dashed" htmlType="button" >
-                Create 
+            <Link to="/login">
+              <Button type="default" htmlType="button" >
+                Back to Login
               </Button>
             </Link>
           </Form.Item>

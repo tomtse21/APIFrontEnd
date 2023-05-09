@@ -1,5 +1,5 @@
 //import './App.css'
-import { Button, Layout, Menu, Space } from 'antd';
+import { Affix, Button, Divider, Layout, Menu, Space } from 'antd';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 //import Landing from "./components/Landing"
 import Home from './components/Home';
@@ -42,19 +42,21 @@ export default function App() {
 
   const AppStlye = {
 
-    height: 60, display: 'flex', justifyContent: 'center', fontWeight: 'bold',
+  display: 'flex', justifyContent: 'center', fontWeight: 'bold',
 
   }
   function Header() {
     return (
       <>
         <div style={AppStlye}><h3>The Pet Shelter</h3> </div>
+        <Divider />
       </>
     )
   }
   function Footer() {
     return (
       <>
+        <Divider />
         <div style={AppStlye}><h3>Copyright © 2023 All Rights Reserved</h3></div>
       </>
     )
@@ -90,7 +92,8 @@ export default function App() {
 
   function Content() {
     return (
-      <div style={{ padding: 15, justifyContent: 'center' }}>
+      <div style={{ paddingLeft: 15, paddingRight: 15, justifyContent: 'center' }}>
+        
         <Routes>
           <Route path="/" element={<ShowCats />}></Route>
           <Route path="/login" element={<LoginPage />}></Route>
@@ -124,7 +127,10 @@ export default function App() {
       <Header />
 
       <div style={{ display: "inline-flex", flexFlow: 'row', width: '100%', flexDirection: "row", flex: 2 }}>
-        <SideMenu />
+        <Affix offsetTop={15} onChange={(affixed) => console.log(affixed)}>
+            <SideMenu />
+        </Affix>
+        
         <Content />
       </div>
       <Footer />
