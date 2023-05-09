@@ -52,14 +52,14 @@ export default function App() {
   function Header(){
     return (
       <>
-        <div style={AppStlye}>Header</div>
+        <div style={AppStlye}><h3>The Pet Shelter</h3> </div>
       </>
     )
   }
   function Footer(){
     return (
       <>
-        <div style={AppStlye}>Footer</div>
+        <div style={AppStlye}><h3>2023</h3></div>
       </>
     )
   }
