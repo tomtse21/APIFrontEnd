@@ -61,7 +61,7 @@ const LoginPage = () => {
     style={{ maxWidth: 600}}
     initialValues={{ remember: true }}
     onFinish={(values) => handleFormSubmit(values)}
-    autoComplete="off"
+    autoComplete="on"
   >
    
     <Form.Item
