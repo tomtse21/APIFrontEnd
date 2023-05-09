@@ -1,15 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Affix, Button, Card, Col, Input, Row, Space, Spin } from 'antd';
-//import articles from './articles.json';
 import { api } from './common/http-common';
 import axios from 'axios';
-import Icon, { DeleteOutlined, HeartFilled, HeartOutlined, LoadingOutlined } from '@ant-design/icons';
+import Icon, { DeleteOutlined, GithubOutlined, HeartFilled, HeartOutlined, LoadingOutlined, MessageOutlined } from '@ant-design/icons';
 
-import styles from './ShowCats.css';
 
-const Article = () => {
-  const [articles, setArticles] = React.useState(null);
+const Cat = () => {
+  const [cats, setCats] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
   const [isliked, setIsLiked] = React.useState(false);
   const { Search } = Input;
@@ -17,9 +15,9 @@ const Article = () => {
 
   
   React.useEffect(() => {
-    axios.get(`${api.uri}/articles`)
+    axios.get(`${api.uri}/cats`)
       .then((res) => {
-        setArticles(res.data);
+        setCats(res.data);
       })
       .then(() => {
         setLoading(false);
@@ -42,7 +40,7 @@ const Article = () => {
     return (
     <Spin indicator={antIcon} />);
   } else {
-    if (!articles) {
+    if (!cats) {
       return (<div>There is no Cat now.</div>)
     } else {
       return (
@@ -55,10 +53,10 @@ const Article = () => {
             <Row gutter={[8, 8]}>
           
           {
-            articles && articles.map(({ id, title, alltext }) => (
-              <Col xs={24} sm={18} md={12} xl={6} key={id}>
-                <Card style={{paddingLeft: 15, paddingRight: 15}} title={`Name :`+title} cover={<img alt="example" src="https://cdn2.thecatapi.com/images/8ru.jpg" />}>
-                  <p>Description: {alltext}</p>
+            cats && cats.map(({ id, name, desc }) => (
+              <Col xs={24} sm={18} md={18} xl={24} key={id}>
+                <Card style={{paddingLeft: 15, paddingRight: 15}} title={`Name :`+name} cover={<img alt="example" src="https://cdn2.thecatapi.com/images/8ru.jpg" />}>
+                  <p>Description: {desc}</p>
                   <p></p>
                   {/* <Link to={`/a/${id}`}>Details</Link> */}
                   <p></p>
@@ -68,7 +66,7 @@ const Article = () => {
                         isliked? <HeartFilled onClick={()=> onClick(id,false)} /> 
                         :<HeartOutlined onClick={()=> onClick(id, true)}/>
                       }
-                      <DeleteOutlined onClick={()=> onClickDelete(id)}/>
+                      <MessageOutlined onClick={()=> onClickDelete(id)}/>
                   </Space>
                    
                 </Card>
@@ -85,4 +83,4 @@ const Article = () => {
  
 }
 
-export default Article;
+export default Cat;

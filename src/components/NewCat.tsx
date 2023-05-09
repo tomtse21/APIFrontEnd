@@ -22,10 +22,9 @@ const NewCat = () => {
     }
 
     // Post request
-    axios.post(`${api.uri}/articles`, postArticle, {
+    axios.post(`${api.uri}/cat`, postArticle, {
       headers: 
         authHeader()
-
     }).then((res) => {
       console.log(res.data);
     });
