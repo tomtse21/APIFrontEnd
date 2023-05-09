@@ -75,8 +75,9 @@ const Cat = () => {
                         isliked? <HeartFilled onClick={()=> onClick(id,false)} /> 
                         :<HeartOutlined onClick={()=> onClick(id, true)}/>
                       }
-                      <MessageOutlined onClick={()=> onClickDelete(id)}/>
+                      <MessageOutlined />
                       {isAuthenticated()?<EditOutlined onClick={()=> onClickUpdate(id)}/>:null}
+                      <GithubOutlined onClick={()=> onClickDelete(id)}/>
                   </Space>
                    
                 </Card>
