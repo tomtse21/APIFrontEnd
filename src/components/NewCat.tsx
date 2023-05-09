@@ -12,17 +12,15 @@ const NewCat = () => {
 
 
   const handleFormSubmit = (values: any) => {
-    const t = values.title;
-    const c = values.context;
-    console.log(values, t, c);
-    const postArticle = {
-      title: t,
-      allText: c,
-      authorID: 1
+    const _name = values.name;
+    const _desc = values.desc;
+    const postCat = {
+      name: _name,
+      desc: _desc
     }
 
     // Post request
-    axios.post(`${api.uri}/cat`, postArticle, {
+    axios.post(`${api.uri}/cats`, postCat, {
       headers: 
         authHeader()
     }).then((res) => {
@@ -37,10 +35,10 @@ const NewCat = () => {
 
   return (
     <Form name="article" onFinish={(values) => handleFormSubmit(values)}>
-      <Form.Item name="title" label="Title" rules={contentRules}>
+      <Form.Item name="name" label="Name" rules={contentRules}>
         <Input />
       </Form.Item>
-      <Form.Item name="context" label="Context" rules={contentRules}>
+      <Form.Item name="description" label="Description" >
         <TextArea rows={4} />
       </Form.Item>
       <Form.Item>

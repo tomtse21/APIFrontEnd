@@ -3,21 +3,26 @@ import { Link } from 'react-router-dom';
 import { Affix, Button, Card, Col, Input, Row, Space, Spin } from 'antd';
 import { api } from './common/http-common';
 import axios from 'axios';
-import Icon, { DeleteOutlined, GithubOutlined, HeartFilled, HeartOutlined, LoadingOutlined, MessageOutlined } from '@ant-design/icons';
+import Icon, { DeleteOutlined, EditOutlined, GithubOutlined, HeartFilled, HeartOutlined, LoadingOutlined, MessageOutlined } from '@ant-design/icons';
+import { useIsAuthenticated } from 'react-auth-kit';
 
 
 const Cat = () => {
-  const [cats, setCats] = React.useState(null);
+  const [cats, setCats] = React.useState<any[]>([])
   const [loading, setLoading] = React.useState(true);
   const [isliked, setIsLiked] = React.useState(false);
   const { Search } = Input;
   const onSearch = (value: string) => console.log(value);
-
+  const isAuthenticated = useIsAuthenticated()
   
   React.useEffect(() => {
     axios.get(`${api.uri}/cats`)
       .then((res) => {
-        setCats(res.data);
+        console.log(res.data.length>=1)
+        if(res.data.length>=1){
+          setCats(res.data);
+        }
+        
       })
       .then(() => {
         setLoading(false);
@@ -35,12 +40,16 @@ const Cat = () => {
       alert(id);
   }
 
+  const onClickUpdate=(id:any)=>{
+    alert(id);
+  }
+
   if (loading) {
     const antIcon = <LoadingOutlined style={{ fontSize: 48 }} spin />
     return (
     <Spin indicator={antIcon} />);
   } else {
-    if (!cats) {
+    if (cats.length==0) {
       return (<div>There is no Cat now.</div>)
     } else {
       return (
@@ -53,8 +62,8 @@ const Cat = () => {
             <Row gutter={[8, 8]}>
           
           {
-            cats && cats.map(({ id, name, desc }) => (
-              <Col xs={24} sm={18} md={18} xl={24} key={id}>
+            cats && cats!.map(({ id, name, desc }) => (
+              <Col xs={24} sm={18} md={12} xl={6} key={id}>
                 <Card style={{paddingLeft: 15, paddingRight: 15}} title={`Name :`+name} cover={<img alt="example" src="https://cdn2.thecatapi.com/images/8ru.jpg" />}>
                   <p>Description: {desc}</p>
                   <p></p>
@@ -67,6 +76,7 @@ const Cat = () => {
                         :<HeartOutlined onClick={()=> onClick(id, true)}/>
                       }
                       <MessageOutlined onClick={()=> onClickDelete(id)}/>
+                      {isAuthenticated()?<EditOutlined onClick={()=> onClickUpdate(id)}/>:null}
                   </Space>
                    
                 </Card>
