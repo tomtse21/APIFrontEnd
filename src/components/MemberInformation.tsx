@@ -75,7 +75,8 @@ const MemberInformation = () => {
       name="username"
       rules={[{ required: true, message: 'Please input your username!' }]}
     >
-      <Input value={members['']}/>
+      {/* <Input value={members['']}/> */}
+      <Input value={localStorage.getItem('userName')?.toString}/>
     </Form.Item>
 
     <Form.Item

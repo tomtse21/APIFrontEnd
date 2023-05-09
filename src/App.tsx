@@ -39,11 +39,6 @@ export default function App() {
   
   // getUserConfig();
 
-  const logout = (event: any) => {
-    // AuthService.LogoutOut();
- 
-    // setIslogin(false);
-  }
 
   const AppStlye = {
   
@@ -60,7 +55,7 @@ export default function App() {
   function Footer(){
     return (
       <>
-        <div style={AppStlye}><h3>2023</h3></div>
+        <div style={AppStlye}><h3>Copyright © 2023 All Rights Reserved</h3></div>
       </>
     )
   }
@@ -75,7 +70,7 @@ export default function App() {
   function SideMenu(){
     return (
       <div>
-      <Menu onClick={({key})=>{
+      <Menu  defaultOpenKeys={['/']} mode="inline" onClick={({key})=>{
         if( key === "logout"){
           console.log("logout");
           singOut();

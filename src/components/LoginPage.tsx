@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Button, Col, Form, Input, Row } from 'antd';
+import { Alert, Button, Col, Form, Input, Row } from 'antd';
 import {Link, useNavigate} from "react-router-dom";
 import UserConfig from './common/user-config';
 import axios from 'axios';
@@ -10,16 +10,11 @@ import { useSignIn } from 'react-auth-kit';
 const LoginPage = () => {
   const [showMessage, setShowMessage] = React.useState(false);
   const [successStr, setSuccessStr] = React.useState("");
+  const [loginSuccess, setLoginSuccess] = React.useState(false);
+
   const signIn = useSignIn();
 
   const navigate = useNavigate();
-  const onFinish = (values: any) => {
-    console.log('Success:', values);
-  };
-  const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
-  };
-  
   const handleFormSubmit = (values: any) => {
       const _username = values.username;
       const _password = values.password;
@@ -27,16 +22,12 @@ const LoginPage = () => {
           username: _username,
           password: _password
       }
-  
-     return axios.post(`${api.uri}/users/login`, postUser, {
-        headers:  
-            authHeader() // for auth 
-        }).then((res) => {
-          setShowMessage(true);
-          console.log(res.data);
-          
-          if(res.status == 201){
+    
+     return axios.post(`${api.uri}/users/login`, postUser).then((res) => {
+        
+          if(res.status == 200){
             setSuccessStr("login successfully!")
+            setLoginSuccess(true);
             UserConfig(_username, _password);
 
             signIn({
@@ -46,24 +37,30 @@ const LoginPage = () => {
               authState: {email: _username}
             });
 
-            navigate("/memberInfo");
-          }else {
-            setSuccessStr("login failed, please insert corrent user information!")
+            navigate("/");
           }
+        }).catch(function(error) {
+          setShowMessage(true);
+          setSuccessStr("login failed, please insert corrent user information!")
         });
       
   }
 
 
   return (<div>
+    
+      {showMessage && (
+        <Alert message={successStr} type={loginSuccess?"success":"error"} closable  />
+        
+    )}
+    <p></p>
     <Form
     name="basic"
     labelCol={{ span: 8}}
     wrapperCol={{ span: 16 }}
-    style={{ maxWidth: 600,marginTop:50 }}
+    style={{ maxWidth: 600}}
     initialValues={{ remember: true }}
     onFinish={(values) => handleFormSubmit(values)}
-    onFinishFailed={onFinishFailed}
     autoComplete="off"
   >
    
