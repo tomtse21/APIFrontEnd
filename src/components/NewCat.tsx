@@ -24,7 +24,7 @@ const NewCat = () => {
       headers: 
         authHeader()
     }).then((res) => {
-      console.log(res.data);
+
     });
 
   }

@@ -1,33 +1,38 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Affix, Button, Card, Col, Input, Row, Space, Spin } from 'antd';
 import { api } from './common/http-common';
 import axios from 'axios';
 import Icon, { DeleteOutlined, EditOutlined, GithubOutlined, HeartFilled, HeartOutlined, LoadingOutlined, MessageOutlined } from '@ant-design/icons';
 import { useIsAuthenticated } from 'react-auth-kit';
-
+import authHeader from "../services/authHeader";
 
 const Cat = () => {
   const [cats, setCats] = React.useState<any[]>([])
   const [loading, setLoading] = React.useState(true);
   const [isliked, setIsLiked] = React.useState(false);
+  const [deleteId, setDeleteId] = React.useState(null);
+
   const { Search } = Input;
   const onSearch = (value: string) => console.log(value);
   const isAuthenticated = useIsAuthenticated()
   
   React.useEffect(() => {
-    axios.get(`${api.uri}/cats`)
-      .then((res) => {
-
-        if(res.data.length>=1){
-          setCats(res.data);
-        }
-        
-      })
-      .then(() => {
-        setLoading(false);
-      })
+    initPageGetData();
   }, []);
+
+  function initPageGetData(){
+    axios.get(`${api.uri}/cats`)
+    .then((res) => {
+      if(res.data.length>=1){
+        setCats(res.data);
+      }
+      
+    })
+    .then(() => {
+      setLoading(false);
+    })
+  }
 
   function onClick(id: any, isliked: boolean) {
     alert(isliked)
@@ -36,9 +41,24 @@ const Cat = () => {
    });
   }
 
-  function onClickDelete(id: any) {
-      alert(id);
-  }
+  const onClickDelete = useCallback((id: any) =>{
+    
+    axios.delete(`${api.uri}/cats/${id}`,{ headers: 
+      authHeader()})
+    .then((res) => {
+
+      if(res.status==201){
+        console.log(id)
+        cats.filter(item=>item.id !=id );
+        setCats(cats)
+        setLoading(true)
+        initPageGetData();
+      }
+    })
+    .then(() => {
+      setLoading(false);
+    })
+  },[]);
 
   const onClickUpdate=(id:any)=>{
     alert(id);
@@ -54,7 +74,7 @@ const Cat = () => {
     } else {
       return (
         <>
-            <Affix offsetTop={15} onChange={(affixed) => console.log(affixed)}>
+            <Affix offsetTop={15} >
                 <Row style={{justifyContent:'right'}} ><Search placeholder="input search text" onSearch={onSearch} style={{ width: '200px' }} /></Row>
             </Affix>
             

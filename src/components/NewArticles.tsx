@@ -15,7 +15,7 @@ const NewArticles = () => {
 
     const t = values.title;
     const c = values.context;
-    console.log(values, t, c);
+
     const postArticle = {
       title: t,
       allText: c,
@@ -28,7 +28,7 @@ const NewArticles = () => {
       authHeader()
 
   }).then((res) => {
-    console.log(res.data);
+
   });
 
 
