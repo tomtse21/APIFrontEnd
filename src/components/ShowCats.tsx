@@ -17,7 +17,7 @@ const Cat = () => {
   const [filteredData, setFilteredData] = React.useState<any[]>([]);
   const [error, setError] = React.useState("");
   const [input, setInput] = React.useState("");
-
+  var unkown = "Unkown";
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -118,7 +118,10 @@ const Cat = () => {
             filteredData && filteredData!.map((currElement,index) => (
               <Col xs={24} sm={18} md={12} xl={6} key={currElement.id}>
                 <Card style={{paddingLeft: 15, paddingRight: 15}} title={`Name :`+currElement.name} cover={<img alt="example" src="https://cdn2.thecatapi.com/images/8ru.jpg" />}>
-                  <p>Description: {currElement.description}</p>
+                  <p>Age: {currElement.age?currElement.age:unkown}</p>
+                  <p>Color: {currElement.color?currElement.color:unkown}</p>
+                  <p>Description: {currElement.description?currElement.description:unkown}</p>
+                  <p>Found location: {currElement.foundlocation?currElement.foundlocation:unkown}</p>
                   <p></p>
                   {/* <Link to={`/a/${id}`}>Details</Link> */}
                   <p></p>
