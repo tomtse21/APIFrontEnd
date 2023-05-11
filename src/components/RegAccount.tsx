@@ -28,7 +28,7 @@ const RegAcc = () => {
     }
     
 
-    return axios.post(`${api.uri}/users`, postUser, {
+    return axios.post(`${api.uri}/users`, values, {
       // headers:  
       //     authHeader() // for auth 
     }).then((res) => {
@@ -96,7 +96,7 @@ const RegAcc = () => {
       
       <Form.Item
         label="Staff Code"
-        name="staffCode"
+        name="usertype"
         rules={[{ required: false, message: '' }]}
       >
         <Input disabled={!componentDisabled}/>

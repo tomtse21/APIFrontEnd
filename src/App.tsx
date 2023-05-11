@@ -1,5 +1,5 @@
 //import './App.css'
-import { Button, Layout, Menu, Space} from 'antd';
+import { Affix, Button, Layout, Menu, Space} from 'antd';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 //import Landing from "./components/Landing"
 import Home from './components/Home';
@@ -63,26 +63,28 @@ export default function App() {
     {label: 'Home', key:'/', icon:<HomeOutlined/>},
     isAuthenticated()?{label: 'favourites', key:'favourites', icon:<HeartOutlined/>}:null,
     isAuthenticated()?{label: 'newcat', key:'newcat', icon:<PlusOutlined/>}:null,
-    isAuthenticated()?{label: 'memberInfo', key:'memberInfo', icon:<InfoOutlined/>}:null,
+    //isAuthenticated()?{label: 'memberInfo', key:'memberInfo', icon:<InfoOutlined/>}:null,
     !isAuthenticated()?{label: 'login', key:'login', icon:<LoginOutlined />}:null,
     isAuthenticated()?{label: 'logout', key:'logout', icon:<LogoutOutlined />}:null
   ]
   function SideMenu(){
     return (
       <div>
-      <Menu  defaultOpenKeys={['/']} mode="inline" onClick={({key})=>{
-        if( key === "logout"){
-          console.log("logout");
-          singOut();
-          navigate("/")
-        }else {
-          navigate(key);
-        }
-      }} defaultSelectedKeys={(window.location.pathname)}
+        <Affix offsetTop={15} >
+          <Menu  defaultOpenKeys={['/']} mode="inline" onClick={({key})=>{
+            if( key === "logout"){
+              console.log("logout");
+              singOut();
+              navigate("/")
+            }else {
+              navigate(key);
+            }
+          }} defaultSelectedKeys={(window.location.pathname)}
 
-      items={items}>
-  
-      </Menu>
+          items={items}>
+      
+          </Menu>
+      </Affix>
       
     </div>
     )

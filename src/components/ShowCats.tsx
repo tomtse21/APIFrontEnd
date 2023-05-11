@@ -1,35 +1,22 @@
 import React, { useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { Affix, Button, Card, Col, Input, Modal, Row, Space, Spin } from 'antd';
+import { Affix, Alert, Button, Card, Col, Form, Input, Modal, Row, Select, Space, Spin, Upload } from 'antd';
 import { api } from './common/http-common';
 import axios from 'axios';
 import Icon, { DeleteOutlined, EditOutlined, GithubOutlined, HeartFilled, HeartOutlined, LoadingOutlined, MessageOutlined } from '@ant-design/icons';
 import { useIsAuthenticated } from 'react-auth-kit';
 import authHeader from "../services/authHeader";
+import TextArea from 'antd/es/input/TextArea';
 
 const Cat = () => {
   const [cats, setCats] = React.useState<any[]>([])
   const [loading, setLoading] = React.useState(true);
   const [isliked, setIsLiked] = React.useState(false);
-  const [deleteId, setDeleteId] = React.useState(null);
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const [targetUpdateCat , setTargetUpdateCat] = React.useState({})
   const [filteredData, setFilteredData] = React.useState<any[]>([]);
-  const [error, setError] = React.useState("");
   const [input, setInput] = React.useState("");
 
   var unkown = "Unkown";
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
 
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
 
   const { Search } = Input;
   const onSearch = (value: string) => console.log(value);
@@ -94,10 +81,80 @@ const Cat = () => {
     })
   },[]);
 
-  const onClickUpdate=(obj:any)=>{
-    setTargetUpdateCat(obj)
-    showModal()
+
+  const contentRules = [
+    { required: true, message: 'Please input somethings' }
+  ]
+
+  
+  const handleFormSubmit =  async (values: any, id:any) => {
+    console.log(values)
+    axios.put(`${api.uri}/cats/${id}`, values, {
+      headers: 
+        authHeader()
+      }).then((res) => {
+        if (res.status == 201) {
+          alert(res.data['msg'])
+          initPageGetData();
+        }
+      }).catch(function(error) {
+      });
+
   }
+  const [form] = Form.useForm();
+  function DataModal(dataToPassIn: any, id:any) {
+    form.setFieldsValue({
+      name: dataToPassIn.name,
+      age: dataToPassIn.age,
+      color: dataToPassIn.color,
+      foundlocation: dataToPassIn.foundlocation,
+      description: dataToPassIn.description
+   });
+
+    Modal.info({
+      title: 'Edit cat information',
+      content: (
+        <div className="modal_data_wrapper">
+
+          <Form form = {form} name="article" onFinish={(values) => handleFormSubmit(values, id)} labelCol={{ span: 9 }}
+        wrapperCol={{ span: 16 }}>
+            <Form.Item name="name" label="Name" rules={contentRules}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="age" label="Age" >
+              <Input />
+            </Form.Item>
+          
+            <Form.Item label="Select" name="color">
+                <Select >
+                  <Select.Option value="Red">Red</Select.Option>
+                  <Select.Option value="Orange">Orange</Select.Option>
+                  <Select.Option value="Yellow">Yellow</Select.Option>
+                  <Select.Option value="White">White</Select.Option>
+                  <Select.Option value="Black">Black</Select.Option>
+                  <Select.Option value="Grey">Grey</Select.Option>
+                  <Select.Option value="Brown">Brown</Select.Option>
+                </Select>
+              </Form.Item>
+              
+            <Form.Item name="foundlocation" label="Found Location">
+              <Input  />
+            </Form.Item>
+            <Form.Item name="description" label="Description" >
+              <TextArea rows={4} />
+            </Form.Item>      
+                       
+            <p></p>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">Submit</Button>
+            </Form.Item>
+
+
+        </Form>
+        </div>
+      ),
+    })
+  };
 
   if (loading) {
     const antIcon = <LoadingOutlined style={{ fontSize: 48 }} spin />
@@ -120,6 +177,7 @@ const Cat = () => {
             filteredData && filteredData!.map((currElement,index) => (
               <Col xs={24} sm={18} md={12} xl={6} key={currElement.id}>
                 <Card style={{paddingLeft: 15, paddingRight: 15}} title={`Name :`+currElement.name} cover={<img  src={''} />}>
+                  <p>{currElement.id}</p>
                   <p>Age: {currElement.age?currElement.age:unkown}</p>
                   <p>Color: {currElement.color?currElement.color:unkown}</p>
                   <p>Description: {currElement.description?currElement.description:unkown}</p>
@@ -133,7 +191,7 @@ const Cat = () => {
                         :<HeartOutlined onClick={()=> onClick(currElement.id, true)}/>
                       }
                       <MessageOutlined />
-                      {isAuthenticated()?<EditOutlined onClick={()=> onClickUpdate(currElement)}/>:null}
+                      {isAuthenticated()?<EditOutlined onClick={()=> DataModal(currElement,currElement.id)}/>:null}
                       <GithubOutlined onClick={()=> onClickDelete(currElement.id)}/>
                   </Space>
                    
@@ -142,11 +200,7 @@ const Cat = () => {
             ))
           }
         </Row>
-        <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-            
-        </Modal>
         </>
-        
       )
     }
   }
