@@ -19,9 +19,10 @@ const NewCat = () => {
     const _name = values.name;
     const _description = values.description;
     let base64str = "";
-    if(fileList.length>1){
+    if(fileList.length>=1){
       await getBase64(fileList[0].originFileObj as RcFile).then(base64Image=> base64str =  base64Image);
       values.imageuri  =base64str
+      console.log(values.imageuri)
     }
 
     axios.post(`${api.uri}/cats`, values, {

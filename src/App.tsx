@@ -62,7 +62,7 @@ export default function App() {
   const items = [
     {label: 'Home', key:'/', icon:<HomeOutlined/>},
     isAuthenticated()?{label: 'favourites', key:'favourites', icon:<HeartOutlined/>}:null,
-    isAuthenticated()?{label: 'newcat', key:'newcat', icon:<PlusOutlined/>}:null,
+    isAuthenticated()&& (localStorage.getItem('userType') == 'admin')?{label: 'newcat', key:'newcat', icon:<PlusOutlined/>}:null,
     //isAuthenticated()?{label: 'memberInfo', key:'memberInfo', icon:<InfoOutlined/>}:null,
     !isAuthenticated()?{label: 'login', key:'login', icon:<LoginOutlined />}:null,
     isAuthenticated()?{label: 'logout', key:'logout', icon:<LogoutOutlined />}:null
@@ -76,6 +76,7 @@ export default function App() {
               console.log("logout");
               singOut();
               navigate("/")
+              localStorage.clear();
             }else {
               navigate(key);
             }
@@ -103,12 +104,12 @@ export default function App() {
               <MemberInformation />
             </RequireAuth>
           }/>
-
-          <Route path={'/newcat'} element={
+          
+          {(localStorage.getItem('userType') == 'admin')?<Route path={'/newcat'} element={
             <RequireAuth loginPath={'/login'}>
               <NewCat />
             </RequireAuth>
-          }/>
+          }/>:null}
 
           <Route path={'/favourites'} element={
             <RequireAuth loginPath={'/login'}>
