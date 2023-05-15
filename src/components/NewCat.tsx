@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useReducer, useState } from "react";
 import { Form, Input, Button, Upload, UploadProps, message, MenuProps, Space, Dropdown, Select, Modal, UploadFile, Alert } from 'antd';
 import { Buffer } from 'buffer';
 import axios from "axios";
@@ -7,40 +7,41 @@ import authHeader from "../services/authHeader";
 import UserConfig from "./common/user-config";
 import { DownOutlined, PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import { RcFile } from "antd/es/upload";
+import { INIT_STATE, formReducer } from "../reducer/formReducer";
+import { ACTION_TYPE } from "../reducer/actionType";
 
 const { TextArea } = Input
 
 const NewCat = () => {
-  const [showMessage, setShowMessage] = React.useState(false);
-  const [successStr, setSuccessStr] = React.useState("");
-  const [statusSuccess, setStatusSuccess] = React.useState(false);
+
+  const [state, dispatch] = useReducer(formReducer, INIT_STATE);
+
 
   const handleFormSubmit =  async (values: any) => {
-    const _name = values.name;
-    const _description = values.description;
+
+    dispatch({type:ACTION_TYPE.FORM_PROCESSING})
+
     let base64str = "";
     if(fileList.length>=1){
       await getBase64(fileList[0].originFileObj as RcFile).then(base64Image=> base64str =  base64Image);
       values.imageuri  =base64str
-      console.log(values.imageuri)
     }
 
     axios.post(`${api.uri}/cats`, values, {
       headers: 
         authHeader()
       }).then((res) => {
-        setShowMessage(true);
         if (res.status == 201) {
-          setStatusSuccess(true);
-          setSuccessStr("Create successfully!")
-  
+          console.log(res.data.msg)
+          dispatch({type:ACTION_TYPE.SUBMIT_SUCCESS,payload:{msg:res.data.msg}})
         }
       }).catch(function(error) {
-        setShowMessage(true);
-        setSuccessStr("login failed, please insert corrent user information!")
+        console.log(error)
+        dispatch({type:ACTION_TYPE.SUBMIT_FAILED, payload:{msg:error.message}})
       });
 
   }
+
 
   const contentRules = [
     { required: true, message: 'Please input somethings' }
@@ -86,12 +87,11 @@ const NewCat = () => {
   
   return (
     <div>
-      {showMessage && (
-          <Alert message={successStr} type={statusSuccess ? "success" : "error"} closable />
-
+      {state.showMessage && (
+          <Alert message={state.message} type={state.messageType}  closable />
         )}
         <p></p>
-      <Form name="article" onFinish={(values) => handleFormSubmit(values)} labelCol={{ span: 9 }}
+      <Form name="cat" onFinish={(values) => handleFormSubmit(values)} labelCol={{ span: 9 }} form={state.form}
         wrapperCol={{ span: 16 }}>
           <Form.Item name="name" label="Name" rules={contentRules}>
             <Input />
