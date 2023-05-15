@@ -93,7 +93,7 @@ export default function App() {
 
   function Content(){
     return (
-      <div style={{padding: 15, justifyContent:'center'}}>
+      <div style={{padding: 15, justifyContent:'center', width:'100%'}}>
         <Routes>
           <Route path="/" element={<ShowCats />}></Route>
           <Route path="/login" element={<LoginPage />}></Route>
@@ -125,7 +125,7 @@ export default function App() {
   return (
     <div  style={{display: "flex" , flexDirection:"column", flex:1,height:'100vh'}}>
       <Header/>
-      <div  style={{display: "inline-flex" , flexFlow: 'row',width: '100%',flexDirection:"row", flex:2}}>
+      <div  style={{display: "inline-flex" , flexFlow: 'row',width: '100%',flexDirection:"row", flex: '0 0 100%'}}>
         <SideMenu />
         <Content />
       </div>

@@ -101,8 +101,9 @@ const NewCat = () => {
             <Input />
           </Form.Item>
         
-          <ColorOption></ColorOption>
-            
+          <Form.Item name="color" label="Color" >
+            <ColorOption text="Select"></ColorOption>
+          </Form.Item>
           <Form.Item name="foundlocation" label="Found Location">
             <Input />
           </Form.Item>

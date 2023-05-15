@@ -15,22 +15,61 @@ const Cat = () => {
   const [cats, setCats] = React.useState<any[]>([])
   const [loading, setLoading] = React.useState(true);
   const [isliked, setIsLiked] = React.useState(false);
-  const [deleteId, setDeleteId] = React.useState(null);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const [targetUpdateCat , setTargetUpdateCat] = React.useState({})
+  // const [targetUpdateCat , setTargetUpdateCat] = React.useState({})
   const [filteredData, setFilteredData] = React.useState<any[]>([]);
+  const [lastTimeData, setLastTimeData] = React.useState<any[]>([]);
   const [error, setError] = React.useState("");
-  const [input, setInput] = React.useState("");
   const [b64, setb64] = React.useState("");
   const [showMessage, setShowMessage] = React.useState(false);
   const [successStr, setSuccessStr] = React.useState("");
   const [statusSuccess, setStatusSuccess] = React.useState(false);
+  const [searchValue, setSearchValue] = React.useState(false)
+  const [selectedValue, setSelectedValue] = React.useState(false)
+  const [ form ] = Form.useForm()
+  const isAuthenticated = useIsAuthenticated()
+  const  unkown = "Unkown";
 
   const contentRules = [
     { required: true, message: 'Please input somethings' }
   ]
 
-  var unkown = "Unkown";
+  const [q, setQ] = React.useState("");
+  const [searchParam] = React.useState(["name", "color"]);
+  const [filterParam, setFilterParam] = React.useState("All");
+
+
+  function search(items:any) {
+    return items.filter((item:any) => {
+        if (item.color == filterParam) {
+            return searchParam.some((newItem) => {
+                return (
+                    item[newItem]
+                        .toString()
+                        .toLowerCase()
+                        .indexOf(q.toLowerCase()) > -1
+                );
+            });
+        } else if (filterParam === "All") {
+            return searchParam.some((newItem) => {
+                return (
+                    item[newItem]
+                        .toString()
+                        .toLowerCase()
+                        .indexOf(q.toLowerCase()) > -1
+                );
+            });
+        }
+    });
+}
+
+
+
+  React.useEffect(() => {
+    initPageGetData();
+  }, []);
+
+
   const showModal = () => {
     setShowMessage(false);
     setIsModalOpen(true);
@@ -45,27 +84,8 @@ const Cat = () => {
   };
 
   const { Search } = Input;
-  const onSearch = (value: string) => console.log(value);
-  const handleFilter = (e:any) => {
-    const searchInput = e.target.value;
-    setInput(searchInput);
-    const newFilterName  = cats.filter((value) => {
-      return       value.name.toLowerCase().includes(searchInput.toLowerCase());
-    });
-    if (searchInput === "") {
-      setFilteredData(cats);
-    } else {
-      setFilteredData(newFilterName);
-    }
-  };
   
-  const [ form ] = Form.useForm()
-
-  const isAuthenticated = useIsAuthenticated()
-  
-  React.useEffect(() => {
-    initPageGetData();
-  }, []);
+  // Call api
 
   function initPageGetData(){
     axios.get(`${api.uri}/cats`)
@@ -97,7 +117,6 @@ const Cat = () => {
     .then((res) => {
 
       if(res.status==201){
-        console.log(id)
         cats.filter(item=>item.id !=id );
         setCats(cats)
         setLoading(true)
@@ -132,28 +151,48 @@ const Cat = () => {
 
   }
 
-  
+
   if (loading) {
     const antIcon = <LoadingOutlined style={{ fontSize: 48 }} spin />
     return (
     <Spin indicator={antIcon} />);
   } else {
-    if (cats.length==0) {
+    if (filteredData.length==0) {
       return (<div>There is no Cat now.</div>)
     } else {
       return (
         <>
             <Affix offsetTop={15} >
-                <Row style={{justifyContent:'right'}} ><Search placeholder="input search text" onChange={(e) => handleFilter(e)} onSearch={onSearch} style={{ width: '200px' }} /></Row>
+                <Row style={{justifyContent:'right',width:'100%'}} >
+                  <Col>
+                  <Select style={{width:100}} onChange={(e) => {
+                                setFilterParam(e);
+                            }}>
+                    <Select.Option value="All">All</Select.Option>
+                    <Select.Option value="Red">Red</Select.Option>
+                    <Select.Option value="Orange">Orange</Select.Option>
+                    <Select.Option value="Yellow">Yellow</Select.Option>
+                    <Select.Option value="White">White</Select.Option>
+                    <Select.Option value="Black">Black</Select.Option>
+                    <Select.Option value="Grey">Grey</Select.Option>
+                    <Select.Option value="Brown">Brown</Select.Option>
+                </Select>
+           
+                  </Col>
+                  <Col>
+                    <Search placeholder="input search text" onChange={(e) => setQ(e.target.value)} style={{ width: '200px' }} />
+                  </Col>
+               
+                </Row>
             </Affix>
-            
             <p></p>
-            <Row gutter={{ xs: 24, sm: 18, md: 12, lg: 6 , xl:3}}>
+
+          <Row gutter={[24, 24]}>
 
           {
-            filteredData && filteredData!.map((currElement,index) => (
+            filteredData && search(filteredData)!.map((currElement:any) => (
 
-              <Col xs={24} sm={18} md={12} lg={6} xl ={3} key={currElement.id}>
+              <Col xs={24} sm={18} md={12} lg={6} xl={6} key={currElement.id}>
                 <Card  style={{height:350}}  title={`Name :`+currElement.name} cover={<img  src='' />}>
                   <p>Age: {currElement.age?currElement.age:unkown}</p>
                   <p>Color: {currElement.color?currElement.color:unkown}</p>
@@ -195,7 +234,17 @@ const Cat = () => {
                 <Input />
               </Form.Item>
             
-              <ColorOption></ColorOption>
+              <Form.Item label={"Filter"} name="color">
+                <Select >
+                    <Select.Option value="Red">Red</Select.Option>
+                    <Select.Option value="Orange">Orange</Select.Option>
+                    <Select.Option value="Yellow">Yellow</Select.Option>
+                    <Select.Option value="White">White</Select.Option>
+                    <Select.Option value="Black">Black</Select.Option>
+                    <Select.Option value="Grey">Grey</Select.Option>
+                    <Select.Option value="Brown">Brown</Select.Option>
+                </Select>
+              </Form.Item>
                 
               <Form.Item name="foundlocation" label="Found Location">
                 <Input />

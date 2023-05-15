@@ -1,10 +1,10 @@
 import { Form, Select } from "antd";
 
-const ColorOption = () =>{
+const ColorOption = (props:any) =>{
     return (
         <>
-            <Form.Item label="Select" name="color">
-                <Select>
+           
+                <Select style={{width:100}} onChange={props.handleChangeColor}>
                     <Select.Option value="Red">Red</Select.Option>
                     <Select.Option value="Orange">Orange</Select.Option>
                     <Select.Option value="Yellow">Yellow</Select.Option>
@@ -13,7 +13,7 @@ const ColorOption = () =>{
                     <Select.Option value="Grey">Grey</Select.Option>
                     <Select.Option value="Brown">Brown</Select.Option>
                 </Select>
-            </Form.Item>
+           
         </>
     )
 
