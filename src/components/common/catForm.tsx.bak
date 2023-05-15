@@ -1,0 +1,140 @@
+import { Alert, Button, Form, Input, Modal, Select, Upload } from "antd"
+import TextArea from "antd/es/input/TextArea"
+import { HTMLInputTypeAttribute } from "react"
+import React, { useReducer, useState } from "react";
+import { INIT_STATE, formReducer } from "../../reducer/formReducer";
+import { ACTION_TYPE } from "../../reducer/actionType";
+import { RcFile, UploadChangeParam, UploadFile } from "antd/es/upload";
+import axios from "axios";
+import { PlusOutlined } from "@ant-design/icons";
+import { api } from './http-common';
+import authHeader from "../../services/authHeader";
+const CatForm = (props: any)=> {
+
+    const data = props.data;
+    const [state, dispatch] = useReducer(formReducer, INIT_STATE);
+    React.useEffect(() => {
+     console.log(props.data)
+        state.form = data;
+      
+    }, []);
+    // for upload picture
+    const [previewOpen, setPreviewOpen] = useState(false);
+    const [previewImage, setPreviewImage] = useState('');
+    const [previewTitle, setPreviewTitle] = useState('');
+    const [fileList, setFileList] = useState<UploadFile[]>([]);
+    const uploadButton = (
+        <div>
+          <PlusOutlined />
+          <div style={{ marginTop: 8 }}>Upload</div>
+        </div>
+      );
+    const contentRules = [
+        { required: true, message: 'Please input somethings' }
+    ]
+    const getBase64 = (file: RcFile): Promise<string> =>
+        new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = (error) => reject(error);
+    });
+      
+    const handleCancel = () => setPreviewOpen(false);
+      
+    const handleFormSubmit =  async (values: any) => {
+      dispatch({type:ACTION_TYPE.FORM_PROCESSING})
+  
+      let base64str = "";
+      if(fileList.length>=1){
+        await getBase64(fileList[0].originFileObj as RcFile).then(base64Image=> base64str =  base64Image);
+        values.imageuri  =base64str
+      }
+  
+      axios.post(`${api.uri}/cats`, values, {
+        headers: 
+          authHeader()
+        }).then((res) => {
+          if (res.status == 201) {
+            console.log(res.data.msg)
+            dispatch({type:ACTION_TYPE.SUBMIT_SUCCESS,payload:{msg:res.data.msg}})
+          }
+        }).catch(function(error) {
+          console.log(error)
+          dispatch({type:ACTION_TYPE.SUBMIT_FAILED, payload:{msg:error.message}})
+        });
+  
+    }
+
+    function handlePreview(file: UploadFile<any>): void {
+        throw new Error("Function not implemented.");
+    }
+
+    function handleImageChange(info: UploadChangeParam<UploadFile<any>>): void {
+        throw new Error("Function not implemented.");
+    }
+
+    return (
+       <>
+      {state.showMessage && (
+          <Alert message={state.message} type={state.messageType}  closable />
+        )}
+        <p></p>
+      <Form name="cat" onFinish={(values) => handleFormSubmit(values)} labelCol={{ span: 9 }} form={state.form}
+        wrapperCol={{ span: 16 }}>
+          <Form.Item name="name" label="Name" rules={contentRules}>
+            <Input/>
+          </Form.Item>
+          <Form.Item name="age" label="Age" >
+            <Input />
+          </Form.Item>
+        
+          <Form.Item label="Select" name="color">
+              <Select>
+                <Select.Option value="Red">Red</Select.Option>
+                <Select.Option value="Orange">Orange</Select.Option>
+                <Select.Option value="Yellow">Yellow</Select.Option>
+                <Select.Option value="White">White</Select.Option>
+                <Select.Option value="Black">Black</Select.Option>
+                <Select.Option value="Grey">Grey</Select.Option>
+                <Select.Option value="Brown">Brown</Select.Option>
+              </Select>
+            </Form.Item>
+            
+          <Form.Item name="foundlocation" label="Found Location">
+            <Input />
+          </Form.Item>
+          <Form.Item name="description" label="Description" >
+            <TextArea rows={4} />
+          </Form.Item>      
+          
+          <Form.Item name="imageuri" label="Photo">
+              <Upload
+                action=""
+                listType="picture-circle"
+                fileList={fileList}
+                onPreview={handlePreview}
+                onChange={handleImageChange}
+              >
+                {fileList.length >= 1 ? null : uploadButton}
+              </Upload>
+          </Form.Item>
+          
+          
+          <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
+            <img alt="example" style={{ width: '100%' }} src={previewImage} />
+          </Modal>
+          
+          <p></p>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">Submit</Button>
+          </Form.Item>
+
+
+        </Form>
+    </>
+    )
+    
+}
+
+export default CatForm
