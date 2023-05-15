@@ -9,6 +9,7 @@ import { DownOutlined, PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import { RcFile } from "antd/es/upload";
 import { INIT_STATE, formReducer } from "../reducer/formReducer";
 import { ACTION_TYPE } from "../reducer/actionType";
+import ColorOption from "./common/colorOption";
 
 const { TextArea } = Input
 
@@ -100,17 +101,7 @@ const NewCat = () => {
             <Input />
           </Form.Item>
         
-          <Form.Item label="Select" name="color">
-              <Select>
-                <Select.Option value="Red">Red</Select.Option>
-                <Select.Option value="Orange">Orange</Select.Option>
-                <Select.Option value="Yellow">Yellow</Select.Option>
-                <Select.Option value="White">White</Select.Option>
-                <Select.Option value="Black">Black</Select.Option>
-                <Select.Option value="Grey">Grey</Select.Option>
-                <Select.Option value="Brown">Brown</Select.Option>
-              </Select>
-            </Form.Item>
+          <ColorOption></ColorOption>
             
           <Form.Item name="foundlocation" label="Found Location">
             <Input />

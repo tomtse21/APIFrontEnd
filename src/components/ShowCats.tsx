@@ -9,6 +9,7 @@ import authHeader from "../services/authHeader";
 import {Buffer} from 'buffer';
 import TextArea from 'antd/es/input/TextArea';
 import { RcFile } from 'antd/es/upload';
+import ColorOption from './common/colorOption';
 
 const Cat = () => {
   const [cats, setCats] = React.useState<any[]>([])
@@ -194,17 +195,7 @@ const Cat = () => {
                 <Input />
               </Form.Item>
             
-              <Form.Item label="Select" name="color">
-                  <Select>
-                    <Select.Option value="Red">Red</Select.Option>
-                    <Select.Option value="Orange">Orange</Select.Option>
-                    <Select.Option value="Yellow">Yellow</Select.Option>
-                    <Select.Option value="White">White</Select.Option>
-                    <Select.Option value="Black">Black</Select.Option>
-                    <Select.Option value="Grey">Grey</Select.Option>
-                    <Select.Option value="Brown">Brown</Select.Option>
-                  </Select>
-                </Form.Item>
+              <ColorOption></ColorOption>
                 
               <Form.Item name="foundlocation" label="Found Location">
                 <Input />
