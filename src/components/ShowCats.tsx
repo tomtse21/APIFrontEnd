@@ -54,7 +54,6 @@ const Cat = () => {
                 );
             });
         } else if (filterParam === "All") {
-          console.log(searchParam)
             return searchParam.some((newItem) => {
                 return (
                     item[newItem]
@@ -92,13 +91,12 @@ const Cat = () => {
   // Call api
 
   function initPageGetData(){
+
     axios.get(`${api.uri}/cats`)
     .then((res) => {
       if(res.data.length>=1){
         setCats(res.data);
         setFilteredData(res.data)
-        // console.log(res.data[0].imageuri['data'], 'base64')
-        // setb64(Buffer.from(res.data[0].imageuri['data']).toString('base64'))
       }
       
     })
@@ -130,10 +128,13 @@ const Cat = () => {
     .then((res) => {
 
       if(res.status==201){
-        cats.filter(item=>item.id !=id );
-        setCats(cats)
+        filteredData.filter(item=>item.id !=id );
+        if(filteredData.length ==0 ){
+          setFilteredData(filteredData);
+        }
+        setCats(filteredData)
+        
         setLoading(true)
-        initPageGetData();
       }
     })
     .then(() => {

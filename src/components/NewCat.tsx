@@ -48,7 +48,6 @@ function genRandonString(length:any) {
     if (!fileList) {
       alert("Please upload an image first!");
     }
-    console.log(fileList[0].fileName)
     const storageRef = ref(storage, `/files/${fileList[0].fileName}`);
     
     // progress can be paused and resumed. It also exposes progress updates.
@@ -68,7 +67,6 @@ function genRandonString(length:any) {
     () => {
       // download url
       getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-        console.log(url);
         setFileUrl(url)
       });
     }
@@ -76,14 +74,11 @@ function genRandonString(length:any) {
       };
     
   const handleFormSubmit =  async (values: any) => {
-    console.log(values)
     dispatch({type:ACTION_TYPE.FORM_PROCESSING})
 
     if(fileList.length>=1){
       fileList[0].fileName =genRandonString(12) + Number(new Date());
       handleUpload()
-      // values.imageuri = handleUpload()
-      // console.log(values.imageuri);
       values.imageuri  = fileList[0].fileName
     }
 
@@ -147,9 +142,9 @@ function genRandonString(length:any) {
 
   
   return (
-    <div>
-      {state.showMessage && (
-          <Alert message={state.message} type={state.messageType}  closable />
+    <div style={{float: 'left'}} >
+      {percent ==100 && state.showMessage && (
+          <Alert message={state.message} type={state.messageType} closable />
         )}
         <p></p>
       <Form name="cat" onFinish={(values) => handleFormSubmit(values)} labelCol={{ span: 9 }} form={state.form}
@@ -194,7 +189,6 @@ function genRandonString(length:any) {
           <Form.Item>
             {/* <button onClick={handleUpload}>Upload to Firebase</button> */}
             <p>{percent} "% done"</p>
-            {fileUrl}
           </Form.Item>
           
           <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
