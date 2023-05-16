@@ -12,6 +12,7 @@ import { RcFile } from 'antd/es/upload';
 import ColorOption from './common/colorOption';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
 import storage from "./common/firebaseConfig";
+import Favourites from './Favourites';
 
 const Cat = () => {
   const [cats, setCats] = React.useState<any[]>([])
@@ -207,25 +208,20 @@ const Cat = () => {
             filteredData && search(filteredData)!.map((currElement:any) => (
 
               <Col xs={24} sm={18} md={12} lg={6} xl={6} key={currElement.id}>
-                <Card  style={{height:'100%'}}  title={`Name :`+currElement.name} cover={<img  src={`https://firebasestorage.googleapis.com/v0/b/apiproject-1786e.appspot.com/o/files%2F${currElement.imageuri}?alt=media`} />}>
-                  <p>Age: {currElement.age?currElement.age:unkown}</p>
-                  <p>Color: {currElement.color?currElement.color:unkown}</p>
-                  <p>Description: {currElement.description?currElement.description:unkown}</p>
-                  <p>Found location: {currElement.foundlocation?currElement.foundlocation:unkown}</p>
-                  <p></p>
-                  {/* <Link to={`/a/${id}`}>Details</Link> */}
-                  <p></p>
-                  <img src={`data:image/png;base64,`+b64} alt="" />
-                  <Space size='small'>
-                      {
-                        isliked? <HeartFilled onClick={()=> onClick(currElement.id,false)} /> 
-                        :<HeartOutlined onClick={()=> onClick(currElement.id, true)}/>
-                      }
-                      <MessageOutlined />
-                      {isAuthenticated()?<EditOutlined onClick={()=> onClickUpdate(currElement,currElement.id)}/>:null}
-                      <GithubOutlined onClick={()=> onClickDelete(currElement, currElement.id)}/>
-                  </Space>
-                   
+                <Card  hoverable
+                 style={{ height:'100%' }}
+                      actions={[
+                        <Favourites id={currElement.id}></Favourites>,
+                        <MessageOutlined />,
+                        isAuthenticated()?<EditOutlined onClick={()=> onClickUpdate(currElement,currElement.id)}/>:null,
+                        <GithubOutlined onClick={()=> onClickDelete(currElement, currElement.id)}/>
+                        ]} 
+
+                        title={`Name :`+currElement.name} 
+                        cover={ <img  src={`https://firebasestorage.googleapis.com/v0/b/apiproject-1786e.appspot.com/o/files%2F${currElement.imageuri}?alt=media`} />}>
+           
+                  
+                 <Card.Meta style={{display:"flex", flexDirection:"column"}} avatar={`Color : ${currElement.color?currElement.color:unkown}`} title={`Age : ${currElement.age?currElement.age:'-'}`} description={`Description : ${currElement.description?currElement.description:unkown}`}></Card.Meta>
                 </Card>
               </Col>
             ))
