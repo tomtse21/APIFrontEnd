@@ -10,34 +10,94 @@ import { RcFile } from "antd/es/upload";
 import { INIT_STATE, formReducer } from "../reducer/formReducer";
 import { ACTION_TYPE } from "../reducer/actionType";
 import ColorOption from "./common/colorOption";
+import storage from "./common/firebaseConfig";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+
 
 const { TextArea } = Input
 
 const NewCat = () => {
 
+
+function genRandonString(length:any) {
+   var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_&';
+   var charLength = chars.length;
+   var result = '';
+   for ( var i = 0; i < length; i++ ) {
+      result += chars.charAt(Math.floor(Math.random() * charLength));
+   }
+   return result;
+}
+
+
   const [state, dispatch] = useReducer(formReducer, INIT_STATE);
+  // State to store uploaded file
+  const [file, setFile] = useState("");
 
+  // progress
+  const [percent, setPercent] = useState(0);
+  
+  const [fileUrl, setFileUrl] = useState('');
+  // Handle file upload event and update state
+  function handleFileChange(event:any) {
+    setFile(event.target.files[0]);
+  }
+  
 
+  const handleUpload = () => {
+    if (!fileList) {
+      alert("Please upload an image first!");
+    }
+    console.log(fileList[0].fileName)
+    const storageRef = ref(storage, `/files/${fileList[0].fileName}`);
+    
+    // progress can be paused and resumed. It also exposes progress updates.
+    // Receives the storage reference and the file to upload.
+    const uploadTask = uploadBytesResumable(storageRef, fileList[0].originFileObj as RcFile);
+     
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const percent = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        // update progress
+        setPercent(percent);
+    },
+    (err) => console.log(err),
+    () => {
+      // download url
+      getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+        console.log(url);
+        setFileUrl(url)
+      });
+    }
+    );
+      };
+    
   const handleFormSubmit =  async (values: any) => {
-
+    console.log(values)
     dispatch({type:ACTION_TYPE.FORM_PROCESSING})
 
-    let base64str = "";
     if(fileList.length>=1){
-      await getBase64(fileList[0].originFileObj as RcFile).then(base64Image=> base64str =  base64Image);
-      values.imageuri  =base64str
+      fileList[0].fileName =genRandonString(12) + Number(new Date());
+      handleUpload()
+      // values.imageuri = handleUpload()
+      // console.log(values.imageuri);
+      values.imageuri  = fileList[0].fileName
     }
 
+    
     axios.post(`${api.uri}/cats`, values, {
       headers: 
         authHeader()
       }).then((res) => {
         if (res.status == 201) {
-          console.log(res.data.msg)
+          
+         
           dispatch({type:ACTION_TYPE.SUBMIT_SUCCESS,payload:{msg:res.data.msg}})
         }
       }).catch(function(error) {
-        console.log(error)
         dispatch({type:ACTION_TYPE.SUBMIT_FAILED, payload:{msg:error.message}})
       });
 
@@ -102,7 +162,15 @@ const NewCat = () => {
           </Form.Item>
         
           <Form.Item name="color" label="Color" >
-            <ColorOption text="Select"></ColorOption>
+            <Select >
+                      <Select.Option value="Red">Red</Select.Option>
+                      <Select.Option value="Orange">Orange</Select.Option>
+                      <Select.Option value="Yellow">Yellow</Select.Option>
+                      <Select.Option value="White">White</Select.Option>
+                      <Select.Option value="Black">Black</Select.Option>
+                      <Select.Option value="Grey">Grey</Select.Option>
+                      <Select.Option value="Brown">Brown</Select.Option>
+                  </Select>
           </Form.Item>
           <Form.Item name="foundlocation" label="Found Location">
             <Input />
@@ -123,6 +191,11 @@ const NewCat = () => {
               </Upload>
           </Form.Item>
           
+          <Form.Item>
+            {/* <button onClick={handleUpload}>Upload to Firebase</button> */}
+            <p>{percent} "% done"</p>
+            {fileUrl}
+          </Form.Item>
           
           <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
             <img alt="example" style={{ width: '100%' }} src={previewImage} />

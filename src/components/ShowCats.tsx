@@ -10,6 +10,8 @@ import {Buffer} from 'buffer';
 import TextArea from 'antd/es/input/TextArea';
 import { RcFile } from 'antd/es/upload';
 import ColorOption from './common/colorOption';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
+import storage from "./common/firebaseConfig";
 
 const Cat = () => {
   const [cats, setCats] = React.useState<any[]>([])
@@ -30,6 +32,7 @@ const Cat = () => {
   const isAuthenticated = useIsAuthenticated()
   const  unkown = "Unkown";
 
+  
   const contentRules = [
     { required: true, message: 'Please input somethings' }
   ]
@@ -51,6 +54,7 @@ const Cat = () => {
                 );
             });
         } else if (filterParam === "All") {
+          console.log(searchParam)
             return searchParam.some((newItem) => {
                 return (
                     item[newItem]
@@ -110,8 +114,17 @@ const Cat = () => {
    });
   }
 
-  const onClickDelete = useCallback((id: any) =>{
-    
+  const onClickDelete = useCallback((values:any, id: any) =>{
+    const storageRef = ref(storage, `/files/${values.imageuri}`);
+  // Create a reference to the file to delete
+
+    // Delete the file
+    deleteObject(storageRef).then(() => {
+      // File deleted successfully
+    }).catch((error) => {
+      // Uh-oh, an error occurred!
+    });
+
     axios.delete(`${api.uri}/cats/${id}`,{ headers: 
       authHeader()})
     .then((res) => {
@@ -193,7 +206,7 @@ const Cat = () => {
             filteredData && search(filteredData)!.map((currElement:any) => (
 
               <Col xs={24} sm={18} md={12} lg={6} xl={6} key={currElement.id}>
-                <Card  style={{height:350}}  title={`Name :`+currElement.name} cover={<img  src='' />}>
+                <Card  style={{height:'100%'}}  title={`Name :`+currElement.name} cover={<img  src={`https://firebasestorage.googleapis.com/v0/b/apiproject-1786e.appspot.com/o/files%2F${currElement.imageuri}?alt=media`} />}>
                   <p>Age: {currElement.age?currElement.age:unkown}</p>
                   <p>Color: {currElement.color?currElement.color:unkown}</p>
                   <p>Description: {currElement.description?currElement.description:unkown}</p>
@@ -209,7 +222,7 @@ const Cat = () => {
                       }
                       <MessageOutlined />
                       {isAuthenticated()?<EditOutlined onClick={()=> onClickUpdate(currElement,currElement.id)}/>:null}
-                      <GithubOutlined onClick={()=> onClickDelete(currElement.id)}/>
+                      <GithubOutlined onClick={()=> onClickDelete(currElement, currElement.id)}/>
                   </Space>
                    
                 </Card>
