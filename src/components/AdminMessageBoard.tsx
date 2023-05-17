@@ -94,7 +94,6 @@ const AdminMessageBoard = () => {
   }, []);
 
   const handleDelete = useCallback((record: IData) => {
-    console.log(record.id)
     axios.delete(`${api.uri}/messages/${record.id}`,{ headers: 
         authHeader()})
       .then((res) => {
@@ -107,12 +106,11 @@ const AdminMessageBoard = () => {
 
   const handleReplyMsg = (record: any) => {
     form.setFieldsValue(record)
-    console.log(form)
     showModal();
-    console.log(`Reply record ${record.name}`);
   }
 
   const showModal = () => {
+    setShowMessage(false);
     setIsModalOpen(true);
   };
   
@@ -125,16 +123,15 @@ const AdminMessageBoard = () => {
   };
 
   const handleFormSubmit =  async (values: any) => {
-
     
-    axios.put(`${api.uri}/cats/${values.id}`, values, {
+    axios.post(`${api.uri}/messages/send-mail`, values, {
       headers: 
         authHeader()
       }).then((res) => {
         setShowMessage(true);
-        if (res.status == 201) {
+        if (res.status == 200) {
           setStatusSuccess(true);
-          setSuccessStr("Create successfully!")
+          setSuccessStr(`Send to ${values.name} successfully!`)
           initPageGetData();
         }
       }).catch(function(error) {
@@ -153,9 +150,14 @@ const AdminMessageBoard = () => {
 
         return (
             <>
+            <p></p>
                <Table columns={columns} dataSource={messages} rowKey={(record) => record.id} />
                <Modal title="Send message to charities" open={isModalOpen}  onOk={handleOk} onCancel={handleCancel}  footer={[]}>
                <Row>
+                    {showMessage && (
+                      <Alert message={successStr} type={statusSuccess ? "success" : "error"} closable />
+                
+                    )}
                     <Divider></Divider>
                     <Form
                         name="messageBoard"

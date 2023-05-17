@@ -25,7 +25,6 @@ const LoginPage = () => {
     
      return axios.post(`${api.uri}/users/login`, postUser).then((res) => {
           if(res.status == 200){
-            console.log(res)
             localStorage.setItem("userType", res.data[0].usertype) 
             setSuccessStr("login successfully!")
             setLoginSuccess(true);

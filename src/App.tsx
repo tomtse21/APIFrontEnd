@@ -72,7 +72,6 @@ export default function App() {
         <Affix offsetTop={15} >
           <Menu  defaultOpenKeys={['/']} mode="inline" onClick={({key})=>{
             if( key === "logout"){
-              console.log("logout");
               singOut();
               navigate("/")
               localStorage.clear();

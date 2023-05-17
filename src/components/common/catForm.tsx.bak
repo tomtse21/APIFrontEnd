@@ -14,7 +14,7 @@ const CatForm = (props: any)=> {
     const data = props.data;
     const [state, dispatch] = useReducer(formReducer, INIT_STATE);
     React.useEffect(() => {
-     console.log(props.data)
+
         state.form = data;
       
     }, []);
@@ -56,11 +56,11 @@ const CatForm = (props: any)=> {
           authHeader()
         }).then((res) => {
           if (res.status == 201) {
-            console.log(res.data.msg)
+g)
             dispatch({type:ACTION_TYPE.SUBMIT_SUCCESS,payload:{msg:res.data.msg}})
           }
         }).catch(function(error) {
-          console.log(error)
+
           dispatch({type:ACTION_TYPE.SUBMIT_FAILED, payload:{msg:error.message}})
         });
   
