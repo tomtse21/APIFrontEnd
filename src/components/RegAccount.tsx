@@ -1,12 +1,10 @@
 import React from 'react';
-import Article from './Articles'
 import { Alert, Button, Checkbox, Col, Divider, Form, Input, Row } from 'antd';
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { api } from './common/http-common';
 import authHeader from "../services/authHeader";
 import UserConfig from './common/user-config';
-import * as userService from '../services/userService';
 
 
 const RegAcc = () => {

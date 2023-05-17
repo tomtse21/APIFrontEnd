@@ -14,22 +14,19 @@ import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } f
 import storage from "./common/firebaseConfig";
 import Favourites from './Favourites';
 import FavoriteButton from './FavoriteButton';
+import MessageBoard from './MessageBoard';
 
 const Cat = () => {
   const [cats, setCats] = React.useState<any[]>([])
   const [loading, setLoading] = React.useState(true);
-  const [isliked, setIsLiked] = React.useState(false);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-  // const [targetUpdateCat , setTargetUpdateCat] = React.useState({})
+  const [isMessageModalOpen, setIsMessageModalOpen] = React.useState(false);
   const [filteredData, setFilteredData] = React.useState<any[]>([]);
-  const [lastTimeData, setLastTimeData] = React.useState<any[]>([]);
-  const [error, setError] = React.useState("");
-  const [b64, setb64] = React.useState("");
   const [showMessage, setShowMessage] = React.useState(false);
   const [successStr, setSuccessStr] = React.useState("");
   const [statusSuccess, setStatusSuccess] = React.useState(false);
-  const [searchValue, setSearchValue] = React.useState(false)
-  const [selectedValue, setSelectedValue] = React.useState(false)
+  const [selecedtCatId, setSelectedCatId] = React.useState(0);
+  const [catImage, setCatImage] = React.useState('');
   const [ form ] = Form.useForm()
   const isAuthenticated = useIsAuthenticated()
   const  unkown = "Unkown";
@@ -82,10 +79,12 @@ const Cat = () => {
 
   const handleOk = () => {
     setIsModalOpen(false);
+    setIsMessageModalOpen(false);
   };
 
   const handleCancel = () => {
     setIsModalOpen(false);
+    setIsMessageModalOpen(false);
   };
 
   const { Search } = Input;
@@ -107,11 +106,10 @@ const Cat = () => {
     })
   }
 
-  function onClick(id: any, isliked: boolean) {
-    alert(isliked)
-   React.useEffect(()=>{
-    setIsLiked(!isliked);
-   });
+  function onClickSendMessage(id: any, img: string) {
+    setSelectedCatId(id);
+    setCatImage(img);
+    setIsMessageModalOpen(true);
   }
 
   const onClickDelete = useCallback((values:any, id: any) =>{
@@ -212,13 +210,11 @@ const Cat = () => {
                 <Card  hoverable
                  style={{ height:'100%' }}
                       actions={[
-                        // <Favourites id={currElement.id}></Favourites>,
-                        <FavoriteButton id={currElement.id} ></FavoriteButton>,
-                        <MessageOutlined />,
-                        isAuthenticated()?<EditOutlined onClick={()=> onClickUpdate(currElement,currElement.id)}/>:null,
-                        <GithubOutlined onClick={()=> onClickDelete(currElement, currElement.id)}/>
+                        isAuthenticated()? <FavoriteButton id={currElement.id} ></FavoriteButton>:null,
+                        <MessageOutlined onClick={() => onClickSendMessage(currElement.id,currElement.imageuri)} />,
+                          (localStorage.getItem('userType') == 'admin') && isAuthenticated()?<EditOutlined onClick={()=> onClickUpdate(currElement,currElement.id)}/>:null,
+                          (localStorage.getItem('userType') == 'admin') && isAuthenticated()?<GithubOutlined onClick={()=> onClickDelete(currElement, currElement.id)}/>:null,
                         ]} 
-
                         title={`Name :`+currElement.name} 
                         cover={ <img  src={`https://firebasestorage.googleapis.com/v0/b/apiproject-1786e.appspot.com/o/files%2F${currElement.imageuri}?alt=media`} />}>
            
@@ -272,6 +268,9 @@ const Cat = () => {
 
 
             </Form>
+        </Modal>
+        <Modal title="Send message to charities" open={isMessageModalOpen}  onOk={handleOk} onCancel={handleCancel}  footer={[]}>
+            <MessageBoard catId={selecedtCatId} catImage={catImage}></MessageBoard>
         </Modal>
         </>
         

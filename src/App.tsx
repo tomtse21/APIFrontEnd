@@ -11,8 +11,10 @@ import RegAcc from './components/RegAccount';
 import React, { useEffect } from 'react';
 import AuthService from './services/authService';
 import { RequireAuth, useIsAuthenticated, useSignOut } from 'react-auth-kit';
-import Icon, { HeartOutlined, HomeOutlined, InfoOutlined, LoginOutlined, LogoutOutlined, PlusOutlined } from '@ant-design/icons';
+import Icon, { HeartOutlined, HomeOutlined, InboxOutlined, InfoOutlined, LoginOutlined, LogoutOutlined, MessageFilled, MessageOutlined, PlusOutlined } from '@ant-design/icons';
 import ShowCats from './components/ShowCats';
+import AdminMessageBoard from './components/AdminMessageBoard';
+import MessageBoard from './components/MessageBoard';
 
 const { Header, Content, Footer } = Layout;
 
@@ -59,6 +61,7 @@ export default function App() {
     {label: 'Home', key:'/', icon:<HomeOutlined/>},
     isAuthenticated()?{label: 'favourites', key:'favourites', icon:<HeartOutlined/>}:null,
     isAuthenticated()&& (localStorage.getItem('userType') == 'admin')?{label: 'newcat', key:'newcat', icon:<PlusOutlined/>}:null,
+    isAuthenticated()&& (localStorage.getItem('userType') == 'admin')?{label: 'messageIn', key:'messageIn', icon:<InboxOutlined/>}:null,
     //isAuthenticated()?{label: 'memberInfo', key:'memberInfo', icon:<InfoOutlined/>}:null,
     !isAuthenticated()?{label: 'login', key:'login', icon:<LoginOutlined />}:null,
     isAuthenticated()?{label: 'logout', key:'logout', icon:<LogoutOutlined />}:null
@@ -106,6 +109,18 @@ export default function App() {
               <NewCat />
             </RequireAuth>
           }/>:null}
+
+          {(localStorage.getItem('userType') == 'admin')?<Route path={'/messageIn'} element={
+            <RequireAuth loginPath={'/login'}>
+              <AdminMessageBoard />
+            </RequireAuth>
+          }/>:null}
+
+          <Route path={'/messageOut'} element={
+            <RequireAuth loginPath={'/login'}>
+              <MessageBoard catId={9999999} catImage=''  />
+            </RequireAuth>
+          }/>
 
           <Route path={'/favourites'} element={
             <RequireAuth loginPath={'/login'}>
