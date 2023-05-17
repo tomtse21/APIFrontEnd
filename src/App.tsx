@@ -2,16 +2,12 @@
 import { Affix, Button, Layout, Menu, Space} from 'antd';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 //import Landing from "./components/Landing"
-import Home from './components/Home';
 import Favourites from './components/Favourites';
 import MemberInformation from './components/MemberInformation';
-import DetailArticle from './components/DetailArticle';
-import NewArticles from './components/NewArticles';
 import LoginPage from './components/LoginPage';
 import UserInfterface from './types/user.type';
 import NewCat from './components/NewCat';
 import RegAcc from './components/RegAccount';
-import Articles from './components/Articles';
 import React, { useEffect } from 'react';
 import AuthService from './services/authService';
 import { RequireAuth, useIsAuthenticated, useSignOut } from 'react-auth-kit';

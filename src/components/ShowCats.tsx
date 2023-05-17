@@ -13,6 +13,7 @@ import ColorOption from './common/colorOption';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
 import storage from "./common/firebaseConfig";
 import Favourites from './Favourites';
+import FavoriteButton from './FavoriteButton';
 
 const Cat = () => {
   const [cats, setCats] = React.useState<any[]>([])
@@ -211,7 +212,8 @@ const Cat = () => {
                 <Card  hoverable
                  style={{ height:'100%' }}
                       actions={[
-                        <Favourites id={currElement.id}></Favourites>,
+                        // <Favourites id={currElement.id}></Favourites>,
+                        <FavoriteButton id={currElement.id} ></FavoriteButton>,
                         <MessageOutlined />,
                         isAuthenticated()?<EditOutlined onClick={()=> onClickUpdate(currElement,currElement.id)}/>:null,
                         <GithubOutlined onClick={()=> onClickDelete(currElement, currElement.id)}/>
