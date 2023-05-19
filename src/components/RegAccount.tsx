@@ -24,7 +24,7 @@ const RegAcc = () => {
       password: _password,
       email: _email
     }
-    
+
 
     return axios.post(`${api.uri}/users`, values, {
       // headers:  
@@ -36,7 +36,7 @@ const RegAcc = () => {
         setSuccessStr("Create successfully!")
 
       }
-    }).catch(function(error) {
+    }).catch(function (error) {
       setShowMessage(true);
       setSuccessStr("login failed, please insert corrent user information!")
     });
@@ -46,14 +46,14 @@ const RegAcc = () => {
   return (<div>
 
     {showMessage && (
-      <Alert message={successStr} type={loginSuccess ? "success" : "error"} closable />
+      <Alert style={{ marginBottom: 15 }} message={successStr} type={loginSuccess ? "success" : "error"} closable />
 
     )}
-    <p></p>
     <Form
       name="basic"
-      labelCol={{ span: 8 }}
-      wrapperCol={{ span: 16 }}
+      labelCol={{ span: 4 }}
+      wrapperCol={{ span: 20 }}
+      style={{ maxWidth: 600, justifyContent: 'left' }}
       initialValues={{ remember: true }}
       onFinish={(values) => handleFormSubmit(values)}
       autoComplete="off"
@@ -84,20 +84,20 @@ const RegAcc = () => {
       </Form.Item>
 
       <Divider />
-      
+
       <Checkbox
         checked={componentDisabled}
         onChange={(e) => setComponentDisabled(e.target.checked)}
       >
-      <div style={{ fontSize: 12 }}>* For Staff Only</div>
+        <div style={{ fontSize: 12 }}>* For Staff Only</div>
       </Checkbox>
-      
+
       <Form.Item
         label="Staff Code"
         name="usertype"
         rules={[{ required: false, message: '' }]}
       >
-        <Input disabled={!componentDisabled}/>
+        <Input disabled={!componentDisabled} />
       </Form.Item>
 
       <Row>
