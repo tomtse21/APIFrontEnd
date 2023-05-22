@@ -38,6 +38,9 @@ const LoginPage = () => {
         });
 
         navigate("/");
+      } else {
+        setShowMessage(true);
+        setSuccessStr("login failed, please insert corrent user information!")
       }
     }).catch(function (error) {
       setShowMessage(true);

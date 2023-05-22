@@ -34,11 +34,14 @@ const RegAcc = () => {
       if (res.status == 201) {
         setLoginSuccess(true);
         setSuccessStr("Create successfully!")
-
+        console.log(12312)
+      } else {
+        setLoginSuccess(true);
+        setSuccessStr("Create successfully!")
       }
     }).catch(function (error) {
       setShowMessage(true);
-      setSuccessStr("login failed, please insert corrent user information!")
+      setSuccessStr("Create acc fail,  please insert corrent user information!")
     });
 
   }

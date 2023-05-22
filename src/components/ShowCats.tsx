@@ -156,7 +156,7 @@ const Cat = () => {
       }
     }).catch(function (error) {
       setShowMessage(true);
-      setSuccessStr("login failed, please insert corrent user information!")
+      setSuccessStr("Retrieve data faile , please refresh")
     });
 
   }

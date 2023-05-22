@@ -138,7 +138,7 @@ const AdminMessageBoard = () => {
       }
     }).catch(function (error) {
       setShowMessage(true);
-      setSuccessStr("login failed, please insert corrent user information!")
+      setSuccessStr("Please insert corrent user information!")
     });
 
   }

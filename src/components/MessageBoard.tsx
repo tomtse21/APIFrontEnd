@@ -12,12 +12,12 @@ import authHeader from "../services/authHeader";
 
 
 interface CatInfo {
-    catId: number;
-    catImage: string;
+  catId: number;
+  catImage: string;
 }
-  
 
-const MessageBoard : React.FC<CatInfo> = ({ catId, catImage }) => {
+
+const MessageBoard: React.FC<CatInfo> = ({ catId, catImage }) => {
 
   const [showMessage, setShowMessage] = React.useState(false);
   const [successStr, setSuccessStr] = React.useState("");
@@ -28,8 +28,8 @@ const MessageBoard : React.FC<CatInfo> = ({ catId, catImage }) => {
     values.cats_id = catId;
 
     return axios.post(`${api.uri}/messages`, values, {
-    //   headers:  
-    //       authHeader() // for auth 
+      //   headers:  
+      //       authHeader() // for auth 
     }).then((res) => {
       setShowMessage(true);
       if (res.status == 201) {
@@ -37,76 +37,76 @@ const MessageBoard : React.FC<CatInfo> = ({ catId, catImage }) => {
         setSuccessStr("Send message successfully!")
 
       }
-    }).catch(function(error) {
+    }).catch(function (error) {
       setShowMessage(true);
-      setSuccessStr("login failed, please insert corrent user information!")
+      setSuccessStr("Failed")
     });
 
   }
-  
+
 
   return (
-    <>  
-    {showMessage && (
-      <Alert message={successStr} type={loginSuccess ? "success" : "error"} closable />
+    <>
+      {showMessage && (
+        <Alert message={successStr} type={loginSuccess ? "success" : "error"} closable />
 
-    )}
-    <div style={{width:"100%"}}>
+      )}
+      <div style={{ width: "100%" }}>
         <Row>
-            {catImage?<Avatar style={{justifyContent:'center',display:'flex', alignItems:'center'}} size={200} shape="circle" src={`https://firebasestorage.googleapis.com/v0/b/apiproject-1786e.appspot.com/o/files%2F${catImage}?alt=media`} />:''}
-            </Row>
-        <Row>
-            <Divider></Divider>
-            <Form
-                name="messageBoard"
-                style={{width:'100%'}}
-                initialValues={{ remember: true }}
-                onFinish={(values) => handleFormSubmit(values)}
-                autoComplete="off"
-                >
-                <Form.Item
-                    label="Name"
-                    name="name"
-                    rules={[{ required: true, message: 'Please input your name!' }]}
-                    >
-                    <Input />
-                </Form.Item>
-
-                <Form.Item
-                    label="Email"
-                    name="email"
-                    rules={[{ required: true, message: 'Please input your email!' }]}
-                    >
-                    <Input />
-                </Form.Item>
-
-
-                <Form.Item
-                    label="Message"
-                    name="message"
-                    rules={[{ required: true, message: 'Please input your message!' }]}
-                >
-                    <TextArea rows={10} />
-                </Form.Item>
-
-                <Row>
-                    <Col>
-                    <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                        <Button type="primary" htmlType="submit">
-                        Submit
-                        </Button>
-                    </Form.Item>
-                    </Col>
-                </Row>
-
-
-
-
-                </Form>
+          {catImage ? <Avatar style={{ justifyContent: 'center', display: 'flex', alignItems: 'center' }} size={200} shape="circle" src={`https://firebasestorage.googleapis.com/v0/b/apiproject-1786e.appspot.com/o/files%2F${catImage}?alt=media`} /> : ''}
         </Row>
-    </div>
-    
-        
+        <Row>
+          <Divider></Divider>
+          <Form
+            name="messageBoard"
+            style={{ width: '100%' }}
+            initialValues={{ remember: true }}
+            onFinish={(values) => handleFormSubmit(values)}
+            autoComplete="off"
+          >
+            <Form.Item
+              label="Name"
+              name="name"
+              rules={[{ required: true, message: 'Please input your name!' }]}
+            >
+              <Input />
+            </Form.Item>
+
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[{ required: true, message: 'Please input your email!' }]}
+            >
+              <Input />
+            </Form.Item>
+
+
+            <Form.Item
+              label="Message"
+              name="message"
+              rules={[{ required: true, message: 'Please input your message!' }]}
+            >
+              <TextArea rows={10} />
+            </Form.Item>
+
+            <Row>
+              <Col>
+                <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                  <Button type="primary" htmlType="submit">
+                    Submit
+                  </Button>
+                </Form.Item>
+              </Col>
+            </Row>
+
+
+
+
+          </Form>
+        </Row>
+      </div>
+
+
     </>
   )
 }
