@@ -98,6 +98,15 @@ const LoginPage = () => {
             </Link>
           </Form.Item>
         </Col>
+        <Col>
+          <Form.Item wrapperCol={{ offset: 8 }}>
+            <Link to="/forgetPwd">
+              <Button type="dashed" htmlType="button" >
+                Forget password
+              </Button>
+            </Link>
+          </Form.Item>
+        </Col>
       </Row>
 
 

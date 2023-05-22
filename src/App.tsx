@@ -1,5 +1,5 @@
 //import './App.css'
-import { Affix, Button, Layout, Menu, Space} from 'antd';
+import { Affix, Button, Layout, Menu, Space } from 'antd';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 //import Landing from "./components/Landing"
 import Favourites from './components/Favourites';
@@ -15,6 +15,7 @@ import Icon, { HeartOutlined, HomeOutlined, InboxOutlined, InfoOutlined, LoginOu
 import ShowCats from './components/ShowCats';
 import AdminMessageBoard from './components/AdminMessageBoard';
 import MessageBoard from './components/MessageBoard';
+import ForgetPassword from './components/ForgetPassword';
 
 const { Header, Content, Footer } = Layout;
 
@@ -34,23 +35,23 @@ export default function App() {
   //     }
   //   }, []);
   // }
-  
+
   // getUserConfig();
 
 
   const AppStlye = {
-  
-    height:60, display:'flex',justifyContent:'center', fontWeight:'bold', 
+
+    height: 60, display: 'flex', justifyContent: 'center', fontWeight: 'bold',
 
   }
-  function Header(){
+  function Header() {
     return (
       <>
         <div style={AppStlye}><h3>The Pet Shelter</h3> </div>
       </>
     )
   }
-  function Footer(){
+  function Footer() {
     return (
       <>
         <div style={AppStlye}><h3>Copyright © 2023 All Rights Reserved</h3></div>
@@ -58,84 +59,85 @@ export default function App() {
     )
   }
   const items = [
-    {label: 'Home', key:'/', icon:<HomeOutlined/>},
-    isAuthenticated()?{label: 'favourites', key:'favourites', icon:<HeartOutlined/>}:null,
-    isAuthenticated()&& (localStorage.getItem('userType') == 'admin')?{label: 'newcat', key:'newcat', icon:<PlusOutlined/>}:null,
-    isAuthenticated()&& (localStorage.getItem('userType') == 'admin')?{label: 'messageIn', key:'messageIn', icon:<InboxOutlined/>}:null,
+    { label: 'Home', key: '/', icon: <HomeOutlined /> },
+    isAuthenticated() ? { label: 'favourites', key: 'favourites', icon: <HeartOutlined /> } : null,
+    isAuthenticated() && (localStorage.getItem('userType') == 'admin') ? { label: 'newcat', key: 'newcat', icon: <PlusOutlined /> } : null,
+    isAuthenticated() && (localStorage.getItem('userType') == 'admin') ? { label: 'messageIn', key: 'messageIn', icon: <InboxOutlined /> } : null,
     //isAuthenticated()?{label: 'memberInfo', key:'memberInfo', icon:<InfoOutlined/>}:null,
-    !isAuthenticated()?{label: 'login', key:'login', icon:<LoginOutlined />}:null,
-    isAuthenticated()?{label: 'logout', key:'logout', icon:<LogoutOutlined />}:null
+    !isAuthenticated() ? { label: 'login', key: 'login', icon: <LoginOutlined /> } : null,
+    isAuthenticated() ? { label: 'logout', key: 'logout', icon: <LogoutOutlined /> } : null
   ]
-  function SideMenu(){
+  function SideMenu() {
     return (
       <div>
         <Affix offsetTop={15} >
-          <Menu  defaultOpenKeys={['/']} mode="inline" onClick={({key})=>{
-            if( key === "logout"){
+          <Menu defaultOpenKeys={['/']} mode="inline" onClick={({ key }) => {
+            if (key === "logout") {
               singOut();
               navigate("/")
               localStorage.clear();
-            }else {
+            } else {
               navigate(key);
             }
           }} defaultSelectedKeys={(window.location.pathname)}
 
-          items={items}>
-      
+            items={items}>
+
           </Menu>
-      </Affix>
-      
-    </div>
+        </Affix>
+
+      </div>
     )
   }
 
-  function Content(){
+  function Content() {
     return (
-      <div style={{padding: 15, justifyContent:'center', width:'100%'}}>
+      <div style={{ padding: 15, justifyContent: 'center', width: '100%' }}>
         <Routes>
           <Route path="/" element={<ShowCats />}></Route>
           <Route path="/login" element={<LoginPage />}></Route>
-          <Route path="/regAcc" element= {<RegAcc />} > </Route>
+          <Route path="/regAcc" element={<RegAcc />} > </Route>
+          <Route path="/forgetPwd" element={<ForgetPassword />}></Route>
 
           <Route path={'/memberInfo'} element={
             <RequireAuth loginPath={'/login'}>
               <MemberInformation />
             </RequireAuth>
-          }/>
-          
-          {(localStorage.getItem('userType') == 'admin')?<Route path={'/newcat'} element={
+          } />
+
+          {(localStorage.getItem('userType') == 'admin') ? <Route path={'/newcat'} element={
             <RequireAuth loginPath={'/login'}>
               <NewCat />
             </RequireAuth>
-          }/>:null}
+          } /> : null}
 
-          {(localStorage.getItem('userType') == 'admin')?<Route path={'/messageIn'} element={
+          {(localStorage.getItem('userType') == 'admin') ? <Route path={'/messageIn'} element={
             <RequireAuth loginPath={'/login'}>
               <AdminMessageBoard />
             </RequireAuth>
-          }/>:null}
+          } /> : null}
 
           <Route path={'/messageOut'} element={
             <RequireAuth loginPath={'/login'}>
-              <MessageBoard catId={9999999} catImage=''  />
+              <MessageBoard catId={9999999} catImage='' />
             </RequireAuth>
-          }/>
+          } />
 
           <Route path={'/favourites'} element={
             <RequireAuth loginPath={'/login'}>
               <Favourites />
             </RequireAuth>
-          }/>
+          } />
 
         </Routes>
       </div>
     )
   }
- 
+
   return (
-    <div  style={{display: "flex" , flexDirection:"column", flex:1,height:'100vh'}}>
-      <Header/>
-      <div  style={{display: "inline-flex" , flexFlow: 'row',width: '100%',flexDirection:"row", flex: '0 0 100%'}}>
+    <div style={{ display: "flex", flexDirection: "column", flex: 1, height: '100vh' }}>
+      <Header />
+      <div style={{ display: "inline-flex", flexFlow: 'row', width: '100%', flexDirection: "row", flex: '0 0 100%' }}>
         <SideMenu />
         <Content />
       </div>
